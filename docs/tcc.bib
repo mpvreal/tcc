@@ -1,0 +1,544 @@
+@inbook{muchnick:97,
+  author = {Steven S. Muchnick},
+  title = {Advanced Compiler Design and Implementation},
+  publisher = {Morgan Kaufmann},
+  year = {1997},
+  pages = {481-482},
+  edition = {1st}
+}  %% DEFINIÇÃO DE ALOCAÇÃO DE REGISTRADORES
+
+@book{briggs:92,
+  title={Register allocation via graph coloring},
+  author={Briggs, Preston},
+  year={1992},
+  publisher={Rice University}
+}
+
+@ARTICLE{verma:06,
+  author={Verma, M. and Marwedel, P.},
+  journal={IEEE Transactions on Very Large Scale Integration (VLSI) Systems}, 
+  title={Overlay techniques for scratchpad memories in low power embedded processors}, 
+  year={2006},
+  volume={14},
+  number={8},
+  pages={802-815},
+  doi={10.1109/TVLSI.2006.878469}
+} %% PQ A ALOCAÇÃO DE REGISTRADORES É IMPORTANTE, CONSOME MUITA ENERGIA
+
+@article{chaitin:81,
+	title = {Register allocation via coloring},
+	journal = {Computer Languages},
+	volume = {6},
+	number = {1},
+	pages = {47-57},
+	year = {1981},
+	issn = {0096-0551},
+	doi = {https://doi.org/10.1016/0096-0551(81)90048-5},
+	url = {https://www.sciencedirect.com/science/article/pii/0096055181900485},
+	author = {Gregory J. Chaitin and Marc A. Auslander and Ashok K. Chandra and John Cocke and Martin E. Hopkins and Peter W. Markstein}
+}  %% ARTIGO ORIGINAL SOBRE ALOCAÇÃO COM COLORAÇÃO DE GRAFOS
+
+@inproceedings{chaitin:82,
+author = {Chaitin, G. J.},
+title = {Register Allocation \& Spilling via Graph Coloring},
+year = {1982},
+isbn = {0897910745},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/800230.806984},
+doi = {10.1145/800230.806984},
+abstract = {In a previous paper we reported the successful use of graph coloring techniques for doing global register allocation in an experimental PL/I optimizing compiler. When the compiler cannot color the register conflict graph with a number of colors equal to the number of available machine registers, it must add code to spill and reload registers to and from storage. Previously the compiler produced spill code whose quality sometimes left much to be desired, and the ad hoe techniques used took considerable amounts of compile time. We have now discovered how to extend the graph coloring approach so that it naturally solves the spilling problem. Spill decisions are now made on the basis of the register conflict graph and cost estimates of the value of keeping the result of a computation in a register rather than in storage. This new approach produces better object code and takes much less compile time.},
+booktitle = {Proceedings of the 1982 SIGPLAN Symposium on Compiler Construction},
+pages = {98–105},
+numpages = {8},
+location = {Boston, Massachusetts, USA},
+series = {SIGPLAN '82}
+}  %% PRIMEIRA IMPLEMENTAÇÃO EM UM COMPILADOR
+
+@Inbook{karp:72,
+	author="Karp, Richard M.",
+	editor="Miller, Raymond E.
+	and Thatcher, James W.
+	and Bohlinger, Jean D.",
+	title="Reducibility among Combinatorial Problems",
+	bookTitle="Complexity of Computer Computations: Proceedings of a symposium on the Complexity of Computer Computations, held March 20--22, 1972, at the IBM Thomas J. Watson Research Center, Yorktown Heights, New York, and sponsored by the Office of Naval Research, Mathematics Program, IBM World Trade Corporation, and the IBM Research Mathematical Sciences Department",
+	year="1972",
+	publisher="Springer US",
+	address="Boston, MA",
+	pages="85--103",
+	isbn="978-1-4684-2001-2",
+	doi="10.1007/978-1-4684-2001-2_9",
+	url="https://doi.org/10.1007/978-1-4684-2001-2_9"
+}  %% ARTIGO CARACTERIZANDO A COLORAÇÃO DE GRAFOS COMO NP-COMPLETO
+
+@article{garey:76,
+author = {Garey, M. R. and Johnson, D. S.},
+title = {The Complexity of Near-Optimal Graph Coloring},
+year = {1976},
+issue_date = {Jan. 1976},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {23},
+number = {1},
+issn = {0004-5411},
+url = {https://doi.org/10.1145/321921.321926},
+doi = {10.1145/321921.321926},
+abstract = {Graph coloring problems, in which one would like to color the vertices of a given graph with a small number of colors so that no two adjacent vertices receive the same color, arise in many applications, including various scheduling and partitioning problems. In this paper the complexity and performance of algorithms which construct such colorings are investigated. For a graph G, let χ(G) denote the minimum possible number of colors required to color G and, for any graph coloring algorithm A, let A(G) denote the number of colors used by A when applied to G. Since the graph coloring problem is known to be “NP-complete,” it is considered unlikely that any efficient algorithm can guarantee A(G) = χ(G) for all input graphs. In this paper it is proved that even coming close to khgr;(G) with a fast algorithm is hard. Specifically, it is shown that if for some constant r &lt; 2 and constant d there exists a polynomial-time algorithm A which guarantees A(G) ≤ r·χ(G) + d, then there also exists a polynomial-time algorithm A which guarantees A(G) = χ(G).},
+journal = {J. ACM},
+month = {jan},
+pages = {43–49},
+numpages = {7}
+}  %% ARTIGO MOSTRANDO A INCAPACIDADE DE GARANTIR UMA ALOCAÇÃO EFICIENTE COM COLORAÇÃO DE GRAFOS
+
+@inproceedings{darte:06,
+author = {Bouchez, Florent and Darte, Alain and Guillon, Christophe and Rastello, Fabrice},
+year = {2006},
+month = {11},
+pages = {283-298},
+title = {Register Allocation: What Does the NP-Completeness Proof of Chaitin et al. Really Prove? Or Revisiting Register Allocation: Why and How},
+volume = {4382},
+isbn = {978-3-540-72520-6},
+doi = {10.1007/978-3-540-72521-3_21}
+}  %% REVISITA A PROVA DE NP-COMPLETUDE DE CHAITIN, DISCORRE SOBRE OS ELEMENTOS QUE DIFICULTAM A ALOCAÇÃO DE REGISTRADORES E INDICA DIREÇÕES DE PESQUISA
+
+@inproceedings{pereira:06,
+author = {Pereira, Fernando and Palsberg, Jens},
+year = {2006},
+month = {03},
+pages = {79-93},
+title = {Register Allocation After Classical SSA Elimination is NP-Complete},
+isbn = {978-3-540-33045-5},
+doi = {10.1007/11690634_6}
+}  %% TRABALHO MAIS RECENTE DEMONSTRANDO A NP-COMPLETUDE DA ALOCAÇÃO DE REGISTRADORES
+
+@InProceedings{liberatore:99,
+author="Liberatore, Vincenzo
+and Farach-Colton, Martin
+and Kremer, Ulrich",
+editor="J{\"a}hnichen, Stefan",
+title="Evaluation of Algorithms for Local Register Allocation",
+booktitle="Compiler Construction",
+year="1999",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="137--152",
+abstract="Local register allocation (LRA) assigns pseudo-registers to actual registers in a basic block so as to minimize the spill cost. In this paper, four different LRA algorithms are compared with respect to the quality of their generated allocations and the execution times of the algorithms themselves. The evaluation is based on a framework that views register allocation as the combination of boundary conditions, LRA, and register assignment. Our study does not address the problem of instruction scheduling in conjunction with register allocation, and we assume that the spill cost depends only on the number and type of load and store operations, but not on their positions within the instruction stream. The paper discusses the first optimum algorithm based on integer linear programming as one of the LRA algorithms. The optimal algorithm also serves as the base line for the quality assessment of generated allocations. In addition, two known heuristics, namely Furthest-First (FF) and Clean-First (CF), and a new heuristic (MIX) are discussed and evaluated. The evaluation is based on thirteen Fortran programs from the fmm, Spec, and Spec95X benchmark suites. An advanced compiler infrastructure (ILOC) was used to generated aggressively optimized, intermediate pseudo-register code for each benchmark program. Each local register allocation method was implemented, and evaluated by simulating the execution of the generated code on a machine with N registers and an instruction set where loads and stores are C times as expensive as any other instruction. Experiments were performed for different values of N and C. The results show that only for large basic blocks the allocation quality gap between the different algorithms is significant. When basic blocks are large, the difference was up to 23{\%}. Overall, the new heuristic (MIX) performed best as compared to the other heuristics, producing allocations within 1{\%} of optimum. All heuristics had running times comparable to live variable analysis, or lower, i.e., were very reasonable. More work will be needed to evaluate the LRA algorithms in the context of more sophisticated global register allocators and source level transformations that potentially increase basic block sizes, including loop unrolling, inlining, and speculative execution (superblocks).",
+isbn="978-3-540-49051-7"
+}  %% COMPARAÇÃO DE VÁRIAS HEURÍSTICAS A SEREM UTILIZADAS VISANDO OTIMIZAR A ALOCAÇÃO DE REGISTRADORES
+
+@article{bernstein:89,
+author = {Bernstein, D. and Golumbic, M. and Mansour, y. and Pinter, R. and Goldin, D. and Krawczyk, H. and Nahshon, I.},
+title = {Spill Code Minimization Techniques for Optimizing Compliers},
+year = {1989},
+issue_date = {July 1989},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {24},
+number = {7},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/74818.74841},
+doi = {10.1145/74818.74841},
+abstract = {Global register allocation and spilling is commonly performed by solving a graph coloring problem. In this paper we present a new coherent set of heuristic methods for reducing the amount of spill code generated. This results in more efficient (and shorter) compiled code. Our approach has been compared to both standard and priority-based coloring algorithms, universally outperforming them.In our approach, we extend the capability of the existing algorithms in several ways. First, we use multiple heuristic functions to increase the likelihood that less spill code will be inserted. We have found three complementary heuristic functions which together appear to span a large proportion of good spill decisions. Second, we use a specially tuned greedy heuristic for determining the order of deleting (and hence coloring) the unconstrained vertices. Third, we have developed a “cleaning” technique which avoids some of the insertion of spill code in non-busy regions.},
+journal = {SIGPLAN Not.},
+month = {jun},
+pages = {258–263},
+numpages = {6}
+}  %% APRESENTA NOVAS HEURÍSTICAS PARA A ESCOLHA DAS VARIÁVEIS QUE IRÃO PARA SPILL
+
+@article{pereira:08,
+author = {Quint\~{a}o Pereira, Fernando Magno and Palsberg, Jens},
+title = {Register Allocation by Puzzle Solving},
+year = {2008},
+issue_date = {June 2008},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {43},
+number = {6},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/1379022.1375609},
+doi = {10.1145/1379022.1375609},
+abstract = {We show that register allocation can be viewed as solving a collection of puzzles. We model the register file as a puzzle board and the program variables as puzzle pieces; pre-coloring and register aliasing fit in naturally. For architectures such as PowerPC, x86, and StrongARM, we can solve the puzzles in polynomial time, and we have augmented the puzzle solver with a simple heuristic for spilling. For SPEC CPU2000, the compilation time of our implementation is as fast as that of the extended version of linear scan used by LLVM, which is the JIT compiler in the openGL stack of Mac OS 10.5. Our implementation produces x86 code that is of similar quality to the code produced by the slower, state-of-the-art iterated register coalescing of George and Appel with the extensions proposed by Smith, Ramsey, and Holloway in 2004.},
+journal = {SIGPLAN Not.},
+month = {jun},
+pages = {216–226},
+numpages = {11},
+keywords = {puzzle solving, register aliasing, register allocation}
+}  %% ESTADO DA ARTE DA ALOCAÇÃO DE REGISTRADORES
+
+@article{lozano:19,
+author = {Lozano, Roberto Casta\~{n}eda and Schulte, Christian},
+title = {Survey on Combinatorial Register Allocation and Instruction Scheduling},
+year = {2019},
+issue_date = {May 2020},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {52},
+number = {3},
+issn = {0360-0300},
+url = {https://doi.org/10.1145/3200920},
+doi = {10.1145/3200920},
+abstract = {Register allocation (mapping variables to processor registers or memory) and instruction scheduling (reordering instructions to increase instruction-level parallelism) are essential tasks for generating efficient assembly code in a compiler. In the past three decades, combinatorial optimization has emerged as an alternative to traditional, heuristic algorithms for these two tasks. Combinatorial optimization approaches can deliver optimal solutions according to a model, can precisely capture trade-offs between conflicting decisions, and are more flexible at the expense of increased compilation time.This article provides an exhaustive literature review and a classification of combinatorial optimization approaches to register allocation and instruction scheduling, with a focus on the techniques that are most applied in this context: integer programming, constraint programming, partitioned Boolean quadratic programming, and enumeration. Researchers in compilers and combinatorial optimization can benefit from identifying developments, trends, and challenges in the area; compiler practitioners may discern opportunities and grasp the potential benefit of applying combinatorial optimization.},
+journal = {ACM Comput. Surv.},
+month = {jun},
+articleno = {62},
+numpages = {50},
+keywords = {instruction scheduling, register allocation, Combinatorial optimization}
+}
+
+@InProceedings{hack:06,
+author="Hack, Sebastian
+and Grund, Daniel
+and Goos, Gerhard",
+editor="Mycroft, Alan
+and Zeller, Andreas",
+title="Register Allocation for Programs in SSA-Form",
+booktitle="Compiler Construction",
+year="2006",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="247--262",
+abstract="As register allocation is one of the most important phases in optimizing compilers, much work has been done to improve its quality and speed. We present a novel register allocation architecture for programs in SSA-form which simplifies register allocation significantly. We investigate certain properties of SSA-programs and their interference graphs, showing that they belong to the class of chordal graphs. This leads to a quadratic-time optimal coloring algorithm and allows for decoupling the tasks of coloring, spilling and coalescing completely. After presenting heuristic methods for spilling and coalescing, we compare our coalescing heuristic to an optimal method based on integer linear programming.",
+isbn="978-3-540-33051-6"
+}  %% ESTADO DA ARTE
+
+@book{mitchell:97,
+  title={Machine Learning},
+  author={Mitchell, T.M.},
+  isbn={9780070428072},
+  lccn={97007692},
+  series={McGraw-Hill international editions - computer science series},
+  url={https://books.google.com.br/books?id=xOGAngEACAAJ},
+  year={1997},
+  publisher={McGraw-Hill Education}
+}  %% INTRODUÇÃO AO APRENDIZADO DE MÁQUINA
+
+@book{alpaydin:20,
+  title={Introduction to Machine Learning, fourth edition},
+  author={Alpaydin, E.},
+  isbn={9780262043793},
+  lccn={2019028373},
+  series={Adaptive Computation and Machine Learning series},
+  url={https://books.google.com.br/books?id=tZnSDwAAQBAJ},
+  year={2020},
+  publisher={MIT Press}
+}
+
+@article{kotsiantis:06,
+author = {Kotsiantis, Sotiris and Zaharakis, I. and Pintelas, P.},
+year = {2006},
+month = {11},
+pages = {159-190},
+title = {Machine learning: A review of classification and combining techniques},
+volume = {26},
+journal = {Artificial Intelligence Review},
+doi = {10.1007/s10462-007-9052-3}
+}
+
+@InProceedings{mathew:21,
+author="Mathew, Amitha
+and Amudha, P.
+and Sivakumari, S.",
+editor="Hassanien, Aboul Ella
+and Bhatnagar, Roheet
+and Darwish, Ashraf",
+title="Deep Learning Techniques: An Overview",
+booktitle="Advanced Machine Learning Technologies and Applications",
+year="2021",
+publisher="Springer Singapore",
+address="Singapore",
+pages="599--608",
+abstract="Deep learning is a class of machine learning whichMathew, Amitha performsAmudha, P. muchSivakumari, S. better on unstructured data. Deep learning techniques are outperforming current machine learning techniques. It enables computational models to learn features progressively from data at multiple levels. The popularity of deep learning amplified as the amount of data available increased as well as the advancement of hardware that provides powerful computers. This article comprises the evolution of deep learning, various approaches to deep learning, architectures of deep learning, methods, and applications.",
+isbn="978-981-15-3383-9"
+}
+
+@article{sharma:21,
+title = {Machine Learning and Deep Learning Applications-A Vision},
+journal = {Global Transitions Proceedings},
+volume = {2},
+number = {1},
+pages = {24-28},
+year = {2021},
+note = {1st International Conference on Advances in Information, Computing and Trends in Data Engineering (AICDE - 2020)},
+issn = {2666-285X},
+doi = {https://doi.org/10.1016/j.gltp.2021.01.004},
+url = {https://www.sciencedirect.com/science/article/pii/S2666285X21000042},
+author = {Neha Sharma and Reecha Sharma and Neeru Jindal},
+keywords = {Deep neural learning (DL), Machine Learning (ML), Machine intelligence (artificial intelligence-AL)},
+abstract = {The application of artificial intelligence is machine learning which is one of the current topics in the computer field as well as for the new COVID-19 pandemic. Researchers have given a lot of input to enhance the precision of machine learning algorithms and lot of work is carried out rapidly to enhance the intelligence of machines. Learning, a natural process in human behaviour that also becomes a vital part of machines as well. Besides this, another concept of deep learning comes to play its major role. Deep neural network (deep learning) is a subgroup of machine learning. Deep learning had been analysed and implemented in various applications and had shown remarkable results thus this field needs wider exploration which can be helpful for further real-world applications. The main objective of this paper is to provide insight survey for machine learning along with deep learning applications in various domains. Also, some applications with new normal COVID-19 blues. A review on already present applications and currently going on applications in several domains, for machine learning along with deep neural learning are exemplified.}
+}
+
+@inproceedings{amarasinghe:03,
+author = {Stephenson, Mark and Amarasinghe, Saman and Martin, Martin and O'Reilly, Una-May},
+title = {Meta Optimization: Improving Compiler Heuristics with Machine Learning},
+year = {2003},
+isbn = {1581136625},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/781131.781141},
+doi = {10.1145/781131.781141},
+abstract = {Compiler writers have crafted many heuristics over the years to approximately solve NP-hard problems efficiently. Finding a heuristic that performs well on a broad range of applications is a tedious and difficult process. This paper introduces Meta Optimization, a methodology for automatically fine-tuning compiler heuristics. Meta Optimization uses machine-learning techniques to automatically search the space of compiler heuristics. Our techniques reduce compiler design complexity by relieving compiler writers of the tedium of heuristic tuning. Our machine-learning system uses an evolutionary algorithm to automatically find effective compiler heuristics. We present promising experimental results. In one mode of operation Meta Optimization creates application-specific heuristics which often result in impressive speedups. For hyperblock formation, one optimization we present in this paper, we obtain an average speedup of 23 (up to 73) for the applications in our suite. Furthermore, by evolving a compiler's heuristic over several benchmarks, we can create effective, general-purpose heuristics. The best general-purpose heuristic our system found for hyperblock formation improved performance by an average of 25 on our training set, and 9 on a completely unrelated test set. We demonstrate the efficacy of our techniques on three different optimizations in this paper: hyperblock formation, register allocation, and data prefetching.},
+booktitle = {Proceedings of the ACM SIGPLAN 2003 Conference on Programming Language Design and Implementation},
+pages = {77–90},
+numpages = {14},
+keywords = {machine learning, genetic programming, priority functions, compiler heuristics},
+location = {San Diego, California, USA},
+series = {PLDI '03}
+}
+
+@INPROCEEDINGS{das:20,
+  author={Das, Dibyendu and Ahmad, Shahid Asghar and Kumar, Venkataramanan},
+  booktitle={2020 IEEE/ACM 6th Workshop on the LLVM Compiler Infrastructure in HPC (LLVM-HPC) and Workshop on Hierarchical Parallelism for Exascale Computing (HiPar)}, 
+  title={Deep Learning-based Approximate Graph-Coloring Algorithm for Register Allocation}, 
+  year={2020},
+  volume={},
+  number={},
+  pages={23-32},
+  doi={10.1109/LLVMHPCHiPar51896.2020.00008}
+}
+
+@inproceedings{venkatakeerthy:23,
+author = {VenkataKeerthy, S. and Jain, Siddharth and Kundu, Anilava and Aggarwal, Rohit and Cohen, Albert and Upadrasta, Ramakrishna},
+title = {RL4ReAl: Reinforcement Learning for Register Allocation},
+year = {2023},
+isbn = {9798400700880},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3578360.3580273},
+doi = {10.1145/3578360.3580273},
+abstract = {We aim to automate decades of research and experience in register allocation, leveraging machine learning. We tackle this problem by embedding a multi-agent reinforcement learning algorithm within LLVM, training it with the state of the art techniques. We formalize the constraints that precisely define the problem for a given instruction-set architecture, while ensuring that the generated code preserves semantic correctness. We also develop a gRPC based framework providing a modular and efficient compiler interface for training and inference. Our approach is architecture independent: we show experimental results targeting Intel x86 and ARM AArch64. Our results match or out-perform the heavily tuned, production-grade register allocators of LLVM.},
+booktitle = {Proceedings of the 32nd ACM SIGPLAN International Conference on Compiler Construction},
+pages = {133–144},
+numpages = {12},
+keywords = {Reinforcement Learning, Register Allocation},
+location = {Montr\'{e}al, QC, Canada},
+series = {CC 2023}
+}
+
+@InProceedings{cavazos:06,
+author="Cavazos, John
+and Moss, J. Eliot B.
+and O'Boyle, Michael F. P.",
+editor="Mycroft, Alan
+and Zeller, Andreas",
+title="Hybrid Optimizations: Which Optimization Algorithm to Use?",
+booktitle="Compiler Construction",
+year="2006",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="124--138",
+abstract="We introduce a new class of compiler heuristics: hybrid optimizations. Hybrid optimizations choose dynamically at compile time which optimization algorithm to apply from a set of different algorithms that implement the same optimization. They use a heuristic to predict the most appropriate algorithm for each piece of code being optimized. Specifically, we construct a hybrid register allocator that chooses between linear scan and graph coloring register allocation. Linear scan is more efficient, but sometimes less effective; graph coloring is generally more expensive, but sometimes more effective. Our setting is Java JIT compilation, which makes optimization algorithm efficiency particularly important.",
+isbn="978-3-540-33051-6"
+}
+
+@inproceedings{briggs2:92,
+  title={Rematerialization},
+  author={Briggs, Preston and Cooper, Keith D and Torczon, Linda},
+  booktitle={Proceedings of the ACM SIGPLAN 1992 conference on Programming language design and implementation},
+  pages={311--321},
+  year={1992}
+}
+
+@article{bergner:97,
+author = {Bergner, Peter and Dahl, Peter and Engebretsen, David and O'Keefe, Matthew},
+title = {Spill Code Minimization via Interference Region Spilling},
+year = {1997},
+issue_date = {May 1997},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {32},
+number = {5},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/258916.258941},
+doi = {10.1145/258916.258941},
+abstract = {Many optimizing compilers perform global register allocation using a Chaitin-style graph coloring algorithm. Live ranges that cannot be allocated to registers are spilled to memory. The amount of code required to spill the live range depends on the spilling heuristic used. Chaitin's spilling heuristic offers some guidance in reducing the amount of spill code produced. However, this heuristic does not allow the partial spilling of live ranges and the reduction in spill code is limited to a local level. In this paper, we present a global technique called interference region spilling that improves the spilling granularity of any local spilling heuristic. Our technique works above the local spilling heuristic, limiting the normal insertion of spill code to a portion of each spilled live range. By partially spilling live ranges, we can achieve large reductions in dynamically executed spill code; up to 75\% in some cases and an average of 33.6\% across the benchmarks tested.},
+journal = {SIGPLAN Not.},
+month = {may},
+pages = {287–295},
+numpages = {9}
+}
+
+@InProceedings{cooper:98,
+author="Cooper, Keith D.
+and Taylor Simpson, L.",
+editor="Koskimies, Kai",
+title="Live range splitting in a graph coloring register allocator",
+booktitle="Compiler Construction",
+year="1998",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="174--187",
+abstract="Graph coloring is the dominant paradigm for global register allocation [8, 7, 4]. Coloring allocators use an interference graph, I,to model conflicts that prevent two values from sharing a register. Nodes in I represent live ranges. An edge between two nodes indicates that they are simultaneously live and thus, cannot share a register. The allocator tries to construct a k-coloring of Z, for k equal to the number of registers on the target machine. If it succeeds, it maps the colors onto the machine registers to produce an allocation. Unfortunately, it may not discover a k-coloring. In that case, it spills some live ranges by saving their values to memory. Early coloring allocators spilled live ranges completely - at each definition and use. This approach often introduces more spill code than necessary. This paper presents a global approach that avoids some spill code by splitting the live range, breaking it into smaller pieces. We are not the first to study this problem. Bergner et al. describe a heuristic called interference region spilling that reduces the amount of code needed to spill a live range [1]. Briggs experimented with an aggressive form of live range splitting; he saw mixed results [3, see Chapter 6]. This paper presents a passive form of live range splitting that uses splitting as an alternative to spilling. The allocator funds regions where splitting breaks the interferences that cause a spill; it uses estimated costs to choose between splitting the live range and spilling it. We present experimental evidence that this technique is effective. We have seen reductions in the amount of dynamic spill overhead as high as 78{\%} for non-trivial routines. Our technique can easily be coupled with Bergner's to create an allocator that makes a cost-based choice between splitting, interference region spilling, and spilling completely for each spilled live range.",
+isbn="978-3-540-69724-4"
+}
+
+
+@InProceedings{mnih:16,
+  title = 	 {Asynchronous Methods for Deep Reinforcement Learning},
+  author = 	 {Mnih, Volodymyr and Badia, Adria Puigdomenech and Mirza, Mehdi and Graves, Alex and Lillicrap, Timothy and Harley, Tim and Silver, David and Kavukcuoglu, Koray},
+  booktitle = 	 {Proceedings of The 33rd International Conference on Machine Learning},
+  pages = 	 {1928--1937},
+  year = 	 {2016},
+  editor = 	 {Balcan, Maria Florina and Weinberger, Kilian Q.},
+  volume = 	 {48},
+  series = 	 {Proceedings of Machine Learning Research},
+  address = 	 {New York, New York, USA},
+  month = 	 {20--22 Jun},
+  publisher =    {PMLR},
+  pdf = 	 {http://proceedings.mlr.press/v48/mniha16.pdf},
+  url = 	 {https://proceedings.mlr.press/v48/mniha16.html},
+  abstract = 	 {We propose a conceptually simple and lightweight framework for deep reinforcement learning that uses asynchronous gradient descent for optimization of deep neural network controllers. We present asynchronous variants of four standard reinforcement learning algorithms and show that parallel actor-learners have a stabilizing effect on training allowing all four methods to successfully train neural network controllers. The best performing method, an asynchronous variant of actor-critic, surpasses the current state-of-the-art on the Atari domain while training for half the time on a single multi-core CPU instead of a GPU. Furthermore, we show that asynchronous actor-critic succeeds on a wide variety of continuous motor control problems as well as on a new task of navigating random 3D mazes using a visual input.}
+}
+
+@INPROCEEDINGS{saha:17,
+
+  author={Saha, Biplab Kumar and Connors, Tiffany A. and Rahman, Saami and Qasem, Apan},
+
+  booktitle={2017 IEEE 19th International Conference on High Performance Computing and Communications; IEEE 15th International Conference on Smart City; IEEE 3rd International Conference on Data Science and Systems (HPCC/SmartCity/DSS)}, 
+
+  title={A Machine Learning Approach to Automatic Creation of Architecture-Sensitive Performance Heuristics}, 
+
+  year={2017},
+
+  volume={},
+
+  number={},
+
+  pages={18-25},
+
+  doi={10.1109/HPCC-SmartCity-DSS.2017.3}}
+
+@InProceedings{musliu:13,
+author="Musliu, Nysret
+and Schwengerer, Martin",
+editor="Nicosia, Giuseppe
+and Pardalos, Panos",
+title="Algorithm Selection for the Graph Coloring Problem",
+booktitle="Learning and Intelligent Optimization",
+year="2013",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="389--403",
+abstract="We present an automated algorithm selection method based on machine learning for the graph coloring problem (GCP). For this purpose, we identify {\$}{\$}78{\$}{\$}78features for this problem and evaluate the performance of six state-of-the-art (meta) heuristics for the GCP. We use the obtained data to train several classification algorithms that are applied to predict on a new instance the algorithm with the highest expected performance. To achieve better performance for the machine learning algorithms, we investigate the impact of parameters, and evaluate different data discretization and feature selection methods. Finally, we evaluate our approach, which exploits the existing GCP techniques and the automated algorithm selection, and compare it with existing heuristic algorithms. Experimental results show that the GCP solver based on machine learning outperforms previous methods on benchmark instances.",
+isbn="978-3-642-44973-4"
+}
+
+@inproceedings{lemos:19,
+author = {Lemos, Henrique and Prates, Marcelo and Avelar, Pedro and Lamb, Luís},
+year = {2019},
+month = {11},
+pages = {879-885},
+title = {Graph Colouring Meets Deep Learning: Effective Graph Neural Network Models for Combinatorial Problems},
+doi = {10.1109/ICTAI.2019.00125}
+}
+
+@article{goudet:22,
+title = {A deep learning guided memetic framework for graph coloring problems},
+journal = {Knowledge-Based Systems},
+volume = {258},
+pages = {109986},
+year = {2022},
+issn = {0950-7051},
+doi = {https://doi.org/10.1016/j.knosys.2022.109986},
+url = {https://www.sciencedirect.com/science/article/pii/S0950705122010796},
+author = {Olivier Goudet and Cyril Grelier and Jin-Kao Hao},
+keywords = {Population-based search, GPU-based parallel search, Deep learning, Heuristics, Graph coloring},
+abstract = {Given an undirected graph G=(V,E) with a set of vertices V and a set of edges E, a graph coloring problem involves finding a partition of the vertices into different independent sets. In this paper we present a new framework that combines a deep neural network with the best tools of classical heuristics for graph coloring. The proposed method is evaluated on two popular graph coloring problems (vertex coloring and weighted coloring). Computational experiments on well-known benchmark graphs show that the proposed approach is able to obtain highly competitive results for both problems. A study of the contribution of deep learning in the method highlights that it is possible to learn relevant patterns useful to obtain better solutions to graph coloring problems.}
+}
+
+@article{schuetz:22,
+  title = {Graph coloring with physics-inspired graph neural networks},
+  author = {Schuetz, Martin J. A. and Brubaker, J. Kyle and Zhu, Zhihuai and Katzgraber, Helmut G.},
+  journal = {Phys. Rev. Res.},
+  volume = {4},
+  issue = {4},
+  pages = {043131},
+  numpages = {10},
+  year = {2022},
+  month = {Nov},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevResearch.4.043131},
+  url = {https://link.aps.org/doi/10.1103/PhysRevResearch.4.043131}
+}
+
+@InProceedings{dodaro:22,
+author="Dodaro, Carmine
+and Ilardi, Davide
+and Oneto, Luca
+and Ricca, Francesco",
+editor="Gottlob, Georg
+and Inclezan, Daniela
+and Maratea, Marco",
+title="Deep Learning for the Generation of Heuristics in Answer Set Programming: A Case Study of Graph Coloring",
+booktitle="Logic Programming and Nonmonotonic Reasoning",
+year="2022",
+publisher="Springer International Publishing",
+address="Cham",
+pages="145--158",
+abstract="Answer Set Programming (ASP) is a well-established declarative AI formalism for knowledge representation and reasoning. ASP systems were successfully applied to both industrial and academic problems. Nonetheless, their performance can be improved by embedding domain-specific heuristics into their solving process. However, the development of domain-specific heuristics often requires both a deep knowledge of the domain at hand and a good understanding of the fundamental working principles of the ASP solvers. In this paper, we investigate the use of deep learning techniques to automatically generate domain-specific heuristics for ASP solvers targeting the well-known graph coloring problem. Empirical results show that the idea is promising: the performance of the ASP solver wasp can be improved.",
+isbn="978-3-031-15707-3"
+}
+
+@book{aho:07,
+  title={Compilers: Principles, Techniques, and Tools},
+  author={Aho, A.V. and Lam, M.S. and Sethi, R. and Ullman, J.D.},
+  isbn={9780321547989},
+  series={Alternative eText Formats Series},
+  url={https://books.google.com.br/books?id=WomBPgAACAAJ},
+  year={2007},
+  publisher={Addison-Wesley}
+}
+
+@misc{llvmdocs:01,
+    title = {{The LLVM Compiler Infrastructure}},
+    howpublished = {\url{https://llvm.org}},
+    note = {Acesso em: 16 de junho de 2023}
+}
+
+@misc{speccpu:01,
+    title = {{SPEC CPU®2017 Overview / What's New?}},
+    howpublished = {\url{https://www.spec.org/cpu2017/Docs/overview.html}},
+    note = {Acesso em: 16 de junho de 2023}
+}
+
+@MastersThesis{lattner:02,
+    author  = {Chris Lattner},
+    title   = "{LLVM: An Infrastructure for Multi-Stage Optimization}",
+    school  = "{Computer Science Dept., University of Illinois at Urbana-Champaign}",
+    year    = {2002},
+    address = {Urbana, IL},
+    month   = {Dec},
+    note    = {{\em See {\tt http://llvm.cs.uiuc.edu}.}}
+}
+
+@inproceedings{xavier:12,
+author = {Xavier, Tiago and Souza Oliveira, George and Lima, Ewerton and Faustino, Anderson},
+year = {2012},
+month = {11},
+pages = {190-198},
+title = {A Detailed Analysis of the LLVM's Register Allocators},
+isbn = {978-1-4799-2937-5},
+journal = {Proceedings - International Conference of the Chilean Computer Science Society, SCCC},
+doi = {10.1109/SCCC.2012.29}
+}
+
+@article{mittal:16,
+author = {Mittal, Sparsh},
+year = {2016},
+month = {07},
+pages = {},
+title = {A Survey of Techniques for Designing and Managing CPU Register File},
+volume = {29},
+journal = {Concurrency and Computation Practice and Experience},
+doi = {10.1002/cpe.3906}
+}
+
+@inbook{toy:86,
+  title={Computer Hardware/software Architecture},
+  author={Toy, W.N. and Zee, B.},
+  isbn={9780131635029},
+  lccn={85024416},
+pages={30},
+  url={https://books.google.com.br/books?id=MttQAAAAMAAJ},
+  year={1986},
+  publisher={Prentice-Hall}
+}

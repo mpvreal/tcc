@@ -1,0 +1,508 @@
+%% Customizations over the file abtex2-modelo-trabalho-academico.tex, v-1.7.1
+%% to employ the style dc-uel.cls that defines the template for documents
+%% of the Departamento de Computação of the Universidade Estadual de Londrina.
+%%
+%% Informações sobre o arquivo original:
+%% abtex2-modelo-trabalho-academico.tex, v-1.7.1 laurocesar
+%% Copyright 2012-2013 by abnTeX2 group at http://abntex2.googlecode.com/ 
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%% 
+%% The Current Maintainer of this work is Daniel dos Santos Kaster, 
+%% dskaster@uel.br
+%%
+%% This work requires the original files
+%% abntex2-modelo-include-comandos, abntex2-modelo-references.bib
+%% and abntex2-modelo-img-grafico.pdf
+%%
+
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% abnTeX2: Modelo de Trabalho Academico (tese de doutorado, dissertacao de
+% mestrado e trabalhos monograficos em geral) em conformidade com 
+% ABNT NBR 14724:2011: Informacao e documentacao - Trabalhos academicos -
+% Apresentacao
+% ------------------------------------------------------------------------
+% ------------------------------------------------------------------------
+
+\documentclass[
+	% -- opções da classe memoir --
+	12pt,				% tamanho da fonte
+	openright,			% capítulos começam em pág ímpar (insere página vazia caso preciso)
+	oneside,			% twoside para impressão em verso e anverso. Oposto a oneside
+	a4paper,			% tamanho do papel. 
+	% -- opções da classe dc-uel --
+	tccpreliminar,			% tipo do trabalho (opções: tcc, tccpreliminar, dissertacao, qualificacaoms)
+					% - tcc (Versão para a Banca do TCC ou Versão Final do TCC)
+					% - tccpreliminar (Versão Preliminar do TCC)
+					% - dissertação (Versão para a Banca da Dissertação ou Versão Final/Revisada da Dissertação)
+					% - qualificacaoms (Qualificação de Mestrado)
+	]{ABNT-DC-UEL}
+
+
+% ---
+% PACOTES
+% ---
+
+% ---
+% Pacotes fundamentais 
+% ---
+\usepackage[T1]{fontenc}		% Selecao de codigos de fonte.
+\usepackage[utf8]{inputenc}		% Codificacao do documento (conversão automática dos acentos)
+\usepackage{graphicx}			% Inclusão de gráficos
+\usepackage{pdfpages}			% Inclusão de (páginas de) arquivos PDF no documento
+% ---
+		
+% ---
+% Pacotes adicionais, usados apenas no âmbito do Modelo Canônico do abnteX2
+% ---
+\usepackage{lipsum}				% para geração de dummy text
+% ---
+
+% ---
+% Informações de dados para CAPA, FOLHA DE ROSTO e outros elementos
+% ---
+\titulo{Aplicações do Aprendizado de Máquina na geração de código \textit{spill}}
+\tituloingles{Machine Learning applications in spill code generation}
+\palavraschave{Compiladores. Aprendizado de Máquina. Código spill. Alocação de registradores. Otimização}
+\palavraschaveingles{Compilers. Machine Learning. Spill code. Register allocation. Optimization.}
+\autor{Matheus Pires Vila Real}
+\citacaoautor{VILA REAL, M.}
+\data{2023}
+
+\diadefesa{24 de novembro}
+\orientador{Prof. Dr. Wesley Attrot} % É membro nato e presidente da Banca Examinadora
+% \coorientador{Prof(a). Dr(a). Nome do(a) Coorientador(a)} % Pode ou não ser membro da Banca; se for, deve ser incluído como membro a seguir
+\membrobancadois{Prof. Dr. Segundo Membro da Banca}
+\instmembrobancadois{Universidade Estadual de Londrina}
+\membrobancatres{Prof. Dr. Terceiro Membro da Banca}
+\instmembrobancatres{Universidade Estadual de Londrina}
+
+% ---
+% compila o indice
+% ---
+\makeindex
+% ---
+
+% ----
+% Início do documento
+% ----
+\begin{document}
+
+% Retira espaço extra obsoleto entre as frases.
+\frenchspacing 
+
+% ----------------------------------------------------------
+% ELEMENTOS PRÉ-TEXTUAIS
+% ----------------------------------------------------------
+% \pretextual
+
+% ---
+% Capa (elemento obrigatório)
+% ---
+\imprimircapa
+% ---
+
+% ---
+% Folha de rosto (elemento obrigatório)
+% (o * indica que haverá a ficha bibliográfica)
+% ---
+\imprimirfolhaderosto*
+% ---
+
+% ---
+% Ficha bibliografica (elemento obrigatório para versões finais de TCC e dissertação)
+% ---
+
+% Isto é um exemplo de Ficha Catalográfica, ou ``Dados internacionais de
+% catalogação-na-publicação''. Você poderá utilizar o site da biblioteca para 
+% gerar esta ficha através do link: http://www.uel.br/bc/ficha/. Quando estiver
+% com o documento, salve-o como PDF no diretório do seu projeto e substitua todo
+% o conteúdo de implementação deste arquivo pelo comando abaixo:
+%
+\begin{fichacatalografica}
+    \includepdf{ficha_catalografica.pdf}
+\end{fichacatalografica}
+
+
+% ---
+
+% ---
+% Folha de aprovação (elemento obrigatório) ==> deve ser omitida no caso de tccpreliminar
+% ---
+
+% Isto é um exemplo de Folha de aprovação, elemento obrigatório da NBR
+% 14724/2011 (seção 4.2.1.3). Você pode utilizar este modelo até a aprovação
+% do trabalho. Após isso, substitua todo o conteúdo deste arquivo por uma
+% imagem da página assinada pela banca com o comando abaixo:
+%
+% \includepdf{folhadeaprovacao_final.pdf}
+\imprimirfolhadeaprovacao
+% ---
+
+% ---
+% Dedicatória (elemento opcional)
+% ---
+\begin{dedicatoria}
+  \vspace*{\fill}
+  \hspace{.4\textwidth}
+  \begin{minipage}{.5\textwidth}
+    \begin{flushright}
+      \textit{Este trabalho é dedicado às crianças adultas que, quando pequenas, sonharam em se tornar cientistas.}
+    \end{flushright}  
+  \end{minipage}
+\end{dedicatoria}
+% ---
+
+% ---
+% Agradecimentos (elemento opcional, mas fortemente recomendado)
+% ---
+\begin{agradecimentos}
+Os agradecimentos principais são direcionados à Gerald Weber, Miguel Frasson,
+Leslie H. Watter, Bruno Parente Lima, Flávio de Vasconcellos Corrêa, Otavio Real
+Salvador, Renato Machnievscz\footnote{Os nomes dos integrantes do primeiro
+projeto abn\TeX\ foram extraídos de
+\url{http://codigolivre.org.br/projects/abntex/}} e todos aqueles que
+contribuíram para que a produção de trabalhos acadêmicos conforme
+as normas ABNT com \LaTeX\ fosse possível.
+
+Agradecimentos especiais são direcionados ao Centro de Pesquisa em Arquitetura
+da Informação\footnote{\url{http://www.cpai.unb.br/}} da Universidade de
+Brasília (CPAI), ao grupo de usuários
+\emph{latex-br}\footnote{\url{http://groups.google.com/group/latex-br}} e aos
+novos voluntários do grupo
+\emph{\abnTeX}\footnote{\url{http://groups.google.com/group/abntex2} e
+\url{http://abntex2.googlecode.com/}}~que contribuíram e que ainda
+contribuirão para a evolução do \abnTeX.
+
+\end{agradecimentos}
+% ---
+
+% ---
+% Epígrafe (elemento opcional)
+% ---
+\begin{epigrafe}
+  \vspace*{\fill}
+  \hspace{.4\textwidth}
+  \begin{minipage}{.5\textwidth}   
+    \begin{flushright}
+	\textit{
+    ``Não vos amoldeis às estruturas deste mundo,
+      mas transformai-vos pela renovação da mente,
+      a fim de distinguir qual é a vontade de Deus:
+      o que é bom, o que Lhe é agradável, o que é perfeito.\\
+      (Bíblia Sagrada, Romanos 12, 2))}
+    \end{flushright}
+  \end{minipage}
+\end{epigrafe}
+% ---
+
+% ---
+% RESUMOS
+% ---
+
+% ---
+% Resumo em Português (elemento obrigatório)
+% ---
+\begin{resumo}
+A alocação de registradores é uma das otimizações de código mais significativas do processo de compilação de um programa. Mas, devido à natureza dos algoritmos empregados nas implementações tradicionais, ela caracteriza-se como um prolema NP-completo, o qual é difícil de se resolver de maneira ótima. Nesse contexto, ao longo dos anos foram sendo propostas heurísticas e ajustes visando tornar as técnicas de geração de código \textit{spill} mais precisas e menos custosas. Com o crescimento da relevância do aprendizado de máquina (\textit{machine learning}) --- área da inteligência artificial, que engloba o desenvolvimento de modelos complexos de categorização e predição treinados de maneira algorítmica --- surge a perspectiva de integração de ambas as áreas. Isto posto, este trabalho se propõe a vislumbrar o estado da arte da aplicação do aprendizado de máquina na alocação de registradores e investigar as possibilidades práticas de implementação de alocadores utilizando modelos treinados por \textit{machine learning}.
+\end{resumo}
+% ---
+
+% ---
+% Resumo em Inglês (elemento obrigatório)
+% ---
+% O ambiente Abstract (com A maiúsculo) é definido no estilo dc-uel
+\begin{Abstract}
+Register allocation is highlighted as one of the key code optimizations throughout a program's compilation process. It is, however, a NP-complete problem, due to the nature of the traditional implementations, which are unable to obtain optimal solutions in reasonable time. In this context, several heuristics and adjustments have been proposed over the course of the years in order to improve the precision and the speed of register allocators. Machine learning, in the other hand, is a field of artificial intelligence encompassing the development of complex classification and prediction models which are trained in an algorithmic way, that grew in relevance and became widely researched recently. Therefore, efforts to apply machine learning techniques to register allocation, aiming to improve spill code generation, arose. This work is intended to examine the current state-of-the-art of the integration of both fields and investigate the implementation possiblities of register allocators that widely employ machine learning models in their inner workings.
+\end{Abstract}
+% ---
+
+% ---
+% Lista de ilustrações (elemento opcional, mas fortemente recomendado)
+% ---
+\pdfbookmark[0]{\listfigurename}{lof}
+\listoffigures*
+\cleardoublepage
+% ---
+
+% ---
+% Lista de tabelas (elemento opcional, mas fortemente recomendado)
+% ---
+\pdfbookmark[0]{\listtablename}{lot}
+\listoftables*
+\cleardoublepage
+% ---
+
+% ---
+% Lista de abreviaturas e siglas (elemento opcional)
+% ---
+\begin{siglas}
+  % \item[ABNT] Associação Brasileira de Normas Técnicas
+  % \item[BNDES] Banco Nacional de Desenvolvimento Econômico e Social
+  % \item[IBGE] Instituto Nacional de Geografia e Estatística
+  % \item[IBICT] Instituto Brasileiro de Informação em Ciência e Tecnologia
+  % \item[NBR] Norma Brasileira
+  \item[CPU] \textit{Central Processing Unit}
+\end{siglas}
+% ---
+
+% ---
+% Lista de símbolos (elemento opcional)
+% ---
+% \begin{simbolos}
+%   \item[$ \Gamma $] Letra grega Gama
+%   \item[$ \Lambda $] Lambda
+%   \item[$ \zeta $] Letra grega minúscula zeta
+%   \item[$ \in $] Pertence
+% \end{simbolos}
+% ---
+
+% ---
+% Sumario (elemento obrigatório)
+% ---
+\pdfbookmark[0]{\contentsname}{toc}
+\tableofcontents*
+\cleardoublepage
+% ---
+
+
+
+% ----------------------------------------------------------
+% ELEMENTOS TEXTUAIS
+% ----------------------------------------------------------
+\textual
+\pagestyle{dc-uel-header} % Configura cabeçalho para apresentar apenas números de página
+
+
+% ----------------------------------------------------------
+% Introdução
+% ----------------------------------------------------------
+\chapter{Introdução}
+Os compiladores constituem uma das classes de programa mais importantes na Ciência da Computação, cuja principal função é a tradução de código-fonte de uma linguagem de programação para outra. Usualmente, esse processo é empregado para transformar código de alto nível em linguagem de máquina de baixo nível, executável diretamente pelo processador de determinada arquitetura-alvo. \cite{aho:07}.
+
+Para atingir esse objetivo, o compilador deve submeter o programa original a uma série de análises --- léxica, sintática e semântica --- a fim de criar uma representação lógica de sua estrutura e prosseguir com a geração de código. Entre essas duas etapas, é desejável efetuar algumas otimizações a fim de tornar o binário final mais eficiente do ponto de vista de execução e mais coerente com as especificidades da arquitetura-alvo \cite{muchnick:97}.
+
+Dentre as etapas de otimização, destaca-se a alocação de registradores, onde o compilador deve distribuir os registradores para as variáveis utilizadas ao longo do fluxo de execução do programa. Os registradores são componentes microarquiteturais diretamente disponíveis ao processador, e caracterizam-se como as unidades de memória de mais rápido acesso \cite{mittal:16}. Contudo, sendo eles um recurso finito, surge a possibilidade de não haverem registradores o suficiente para comportar todos os valores e resultados intermediários em memória de uma única vez \cite{aho:07}.
+
+Nesses casos, há a necessidade de se mapear algumas variáveis para a memória principal, e o compilador deve então introduzir no código instruções de acesso à memória para salvar e recuperar os valores lá armazenados. Essas instruções são denominadas código \textit{spill}, ou \textit{spill code} \cite{briggs:92}. Um esquema de alocação ideal deve buscar minimizar o tráfego entre a memória principal e a CPU, visto que essas operações, em comparação com o acesso a registradores, são significativamente mais lentas e dispendiosas do ponto de vista energético. As operações em memória representam de 50\% a 75\% dos gastos de energia de um sistema computacional \cite{verma:06}, e um alocador sofisticado pode proporcionar uma melhora de até 250\% no tempo de execução de um programa comparado a um alocador simples \cite{pereira:08}.
+
+A abordagem tradicional emprega a coloração de grafo como abstração para representar o processo de atribuição dos registradores físicos para as variáveis virtuais. Nesse modelo, os valores em memória --- chamados de registradores virtuais da representação intermediária do código --- são expressos como os nós de um grafo a ser colorido; as arestas representam as relações de interferência entre os registradores virtuais, isto é, a presença de intersecções entre o tempo de vida dos valores em memória, enquanto que a coloração em si seria o processo de encontrar registradores físicos disponíveis para cada variável \cite{chaitin:81}.
+
+Contudo, produzir uma alocação eficiente não é uma tarefa trivial. A coloração de grafos é um problema NP-completo, isto é, não há algoritmos determinísticos que a resolvam em tempo polinomial \cite{karp:72}, e descobrir a mera quantidade de cores necessárias para colorir um grafo é um problema difícil \cite{garey:76}. Ademais, uma implementação ingênua pode introduzir \textit{spill code} desnecessário ao longo de todo o tempo de vida de um registrador virtual \cite{bergner:97}, ou realizar escolhas ruins sobre quais variáveis enviar para a memória principal, ao eleger valores frequentemente utilizados no código e que exigirão uma grande quantidade de acessos ou escritas à memória \cite{bernstein:89}.
+
+Ao longo dos anos, soluções para se contornar essas dificuldades foram propostas: ajustes no algoritmo original, visando tornar a introdução de \textit{spill code} mais precisa nos pontos de interferência necessários \cite{chaitin:82, briggs:92, briggs2:92, cooper:98}, e a utilização de heurísticas para cálculo de custo de \textit{spill}, visando melhorar a qualidade das escolhas de quais variáveis mapear para a memória principal. Infelizmente, as heurísticas dependem de uma boa quantidade de ajustes para propiciar um desempenho adequado. O desenvolvimento de um conjunto de heurísticas para uma arquitetura-alvo específica ainda é feito através de tentativa e erro, e o ajuste fino das funções prioritárias é um processo tedioso \cite{amarasinghe:03}.
+
+O aprendizado de máquina (\textit{machine learning}), por sua vez, é uma área da inteligência artificial que abrange o desenvolvimento de modelos e agentes inteligentes treinados de maneira algorítmica. Eles realizam tarefas de predição e classificação probabilísticas a partir de parâmetros de entrada, e são calibrados após sucessivas iterações de treinamento, onde os resultados de saída são confrontados com um conjunto de dados previamente conhecidos sobre o problema, de modo a se calcular um erro e ajustar os parâmetros internos do modelo para minimizá-lo \cite{sharma:21}.
+
+Nas últimas décadas, o aprendizado de máquina e a inteligência artificial como um todo vem avançando consideravelmente, graças ao crescimento do poder computacional das máquinas e conforme cada vez mais dados são gerados e coletados \cite{alpaydin:20}. Esse cenário expande os horizontes para a integração de ambas as áreas, que almeja o desenvolvimento de melhores heurísticas e métodos para otimizar a alocação de registradores empregando técnicas de aprendizado de máquina. Trabalhos vêm sendo publicados explorando a interdisciplinaridade de ambas as áreas e trazendo resultados animadores ou, ao menos, de interesse, como é o caso das pesquisas de Amarasinghe \textit{et al.}, Das \textit{et al.} e VenkataKeerthy \textit{et al.} \cite{amarasinghe:03, das:20, venkatakeerthy:23}.
+
+Este trabalho se propõe a investigar a aplicação das técnicas de aprendizado de máquina na alocação de registradores, particularmente sua utilidade na geração de código \textit{spill}. Ele irá contemplar o estado da arte da alocação de registradores e, apoiado no conhecimento acadêmico sobre a área, serão propostos métodos de alocação e heurísticas que utilizam \textit{machine learning}.
+
+% ----------------------------------------------------------
+% PARTE
+% ----------------------------------------------------------
+% A organização dos capítulos em partes só é recomendada caso o texto seja muito extenso
+% Não é comum dividir o trabalho em partes em TCCs e dissertações de mestrado
+
+%\part{Preparação da pesquisa}
+
+% ----------------------------------------------------------
+% Capitulo com exemplos de comandos inseridos de arquivo externo 
+% ----------------------------------------------------------
+
+% \include{abntex2-modelo-include-comandos}
+
+% ---
+% Capitulos de exemplo
+% ---
+\chapter{Fundamentação Teórico-Metodológica}
+
+\section{Alocação de Registradores}
+
+\subsection{Conceitos}
+
+\subsubsection{Registradores Virtuais}
+
+\subsubsection{Vivacidade e Interferências}
+
+\subsubsection{Geração de Código \textit{Spill}}
+
+\subsection{Alocação via Coloração de Grafos}
+
+\subsubsection{Alocador de \textit{Chaitin}}
+
+\subsubsection{Alocador de \textit{Chaitin-Briggs}}
+
+\subsubsection{\textit{Iterated Register Coalescing}}
+
+\subsection{Técnicas de Minimização de \textit{Spill}}
+
+\subsubsection{Heurísticas de Minimização}
+
+\subsubsection{\textit{Spilling} por Região de Interferência}
+
+\subsubsection{\textit{Live Range Splitting}}
+
+\subsubsection{\textit{Outras Técnicas}}
+
+\subsection{Outros Tipos de Alocador}
+
+\subsubsection{Alocação via \textit{Linear Scan}}
+
+\subsubsection{Alocação via PBQP}
+
+\section{Aprendizado de Máquina}
+
+\subsection{Paradigmas de Aprendizado}
+
+\subsubsection{Aprendizado Supervisionado}
+
+\subsubsection{Aprendizado Não-Supervisionado}
+
+\subsection{Redes Neurais Artificiais}
+
+\subsubsection{Aprendizado Profundo}
+
+\chapter{Trabalhos combinando Alocação de Registradores e Aprendizado de Máquina}
+
+\chapter{A Infraestrutura LLVM}
+
+\chapter{Conclusão}
+
+\lipsum[31-33]
+
+% ----------------------------------------------------------
+% ELEMENTOS PÓS-TEXTUAIS
+% ----------------------------------------------------------
+\postextual
+
+
+% ----------------------------------------------------------
+% Referências bibliográficas
+% ----------------------------------------------------------
+\bibliography{abntex2-modelo-references}
+
+
+% ----------------------------------------------------------
+% Glossário
+% ----------------------------------------------------------
+%
+% Consulte o manual da classe abntex2 para orientações sobre o glossário.
+%
+%\glossary
+
+% ----------------------------------------------------------
+% Apêndices
+% ----------------------------------------------------------
+
+% ---
+% Apêndices (elemento opcional)
+%
+% São textos ou documentos elaborados pelo autor do trabalho a fim complementar
+% a sua argumentação.
+% ---
+\begin{apendicesenv}
+
+% Imprime uma página indicando o início dos apêndices
+\partapendices
+
+% ----------------------------------------------------------
+\chapter{Quisque libero justo}
+% ----------------------------------------------------------
+
+\lipsum[50]
+
+\end{apendicesenv}
+% ---
+
+
+% ----------------------------------------------------------
+% Anexos (elemento opcional)
+%
+% São textos ou documentos, não elaborado pelo autor do trabalho que podem servir como
+% ilustração, comprovação ou que contribua de forma relevante com o conteúdo já apresentado.
+% ----------------------------------------------------------
+
+% ---
+% Inicia os anexos
+% ---
+\begin{anexosenv}
+
+% Imprime uma página indicando o início dos anexos
+\partanexos
+
+% ---
+\chapter{Morbi ultrices rutrum lorem.}
+% ---
+\lipsum[30]
+
+\end{anexosenv}
+
+
+% ----------------------------------------------------------
+% Trabalhos publicados pelo autor
+%
+% Elemento obrigatório para as dissertações e teses do Programa
+% de Pós-graduação em Ciência da Computação da UEL.
+% (TCCs e monografias não precisam incluir essa seção)
+% ----------------------------------------------------------
+\chapter*{Trabalhos Publicados pelo Autor}
+\addcontentsline{toc}{chapter}{Trabalhos Publicados pelo Autor}
+
+\noindent
+Trabalhos publicados pelo autor durante o programa.
+
+% Elemento OBRIGATÓRIO somente para teses de doutorado e dissertações de mestrado no template DC/UEL).
+% Listar publicações principais do trabalho (i.e., diretamente relacionados ao tema) e complementares, quando existirem.
+% Listar em ordem decrescente de importância e/ou em ordem decrescente de ano de publicação.
+
+\vspace{12pt}
+
+\noindent
+Publicações principais do trabalho.
+
+\begin{enumerate}
+
+\item Jose da silva, autor2 da silva, orientador da silva, \textbf{Título do artigo}, local onde foi
+publicado, mês/ano, editora, número de página, isbn, etc. (Qualis CC 2017, xx)
+
+\item Jose da silva, autor2 da silva, orientador da silva, \textbf{Título do artigo}, local onde foi
+publicado, mês/ano, editora, número de página, isbn, etc. (Qualis CC 2017, xx)
+
+\item Jose da silva, autor2 da silva, orientador da silva, \textbf{Título do artigo}, local onde foi
+publicado, mês/ano, editora, número de página, isbn, etc. (Qualis CC 2017, xx)
+
+\end{enumerate}
+
+\noindent
+Publicações complementares.
+
+\begin{enumerate}
+
+\item Jose da silva, autor2 da silva, orientador da silva, \textbf{Título do artigo}, local onde foi
+publicado, mês/ano, editora, número de página, isbn, etc. (Qualis CC 2017, xx)
+
+\item Jose da silva, autor2 da silva, orientador da silva, etc. \textbf{Título do artigo}, local onde foi
+publicado, mês/ano, editora, número de página, isbn, (Qualis CC 2017, xx)
+
+\end{enumerate}
+
+
+%---------------------------------------------------------------------
+% INDICE REMISSIVO (elemento opcional)
+%---------------------------------------------------------------------
+% Requer incluir instruções \index{...} no decorrer do texto, para marcar os termos a serem indexados
+
+\printindex
+
+\end{document}
+
