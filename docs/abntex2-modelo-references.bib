@@ -542,3 +542,353 @@ pages={30},
   year={1986},
   publisher={Prentice-Hall}
 }
+
+@article{allen:70,
+  title={Control flow analysis},
+  author={Allen, Frances E},
+  journal={ACM Sigplan Notices},
+  volume={5},
+  number={7},
+  pages={1--19},
+  year={1970},
+  publisher={ACM New York, NY, USA}
+}
+
+@article{appel:96,
+author = {George, Lal and Appel, Andrew W.},
+title = {Iterated Register Coalescing},
+year = {1996},
+issue_date = {May 1996},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {18},
+number = {3},
+issn = {0164-0925},
+url = {https://doi.org/10.1145/229542.229546},
+doi = {10.1145/229542.229546},
+abstract = {An important function of any register allocator is to target registers so as to eliminate copy instructions. Graph-coloring register allocation is an elegant approach to this problem. If the source and destination of a move instruction do not interfere, then their nodes can be coalesced in the interference graph. Chaitin's coalescing heuristic could make a graph uncolorable (i.e., introduce spills); Briggs et al. demonstrated a conservative coalescing heuristic that preserves colorability. But Briggs's algorithm is too conservative and leaves too many move instructions in our programs. We show how to interleave coloring reductions with Briggs's coalescing heuristic, leading to an algorithm that is safe but much more aggressive.},
+journal = {ACM Trans. Program. Lang. Syst.},
+month = {may},
+pages = {300–324},
+numpages = {25},
+keywords = {register coalescing, register allocation, graph coloring, copy propagation}
+}
+
+@inproceedings{eisl:16,
+  title={Trace-based register allocation in a jit compiler},
+  author={Eisl, Josef and Grimmer, Matthias and Simon, Doug and W{\"u}rthinger, Thomas and M{\"o}ssenb{\"o}ck, Hanspeter},
+  booktitle={Proceedings of the 13th International Conference on Principles and Practices of Programming on the Java Platform: Virtual Machines, Languages, and Tools},
+  pages={1--11},
+  year={2016}
+}
+
+@InProceedings{braun:09,
+author="Braun, Matthias
+and Hack, Sebastian",
+editor="de Moor, Oege
+and Schwartzbach, Michael I.",
+title="Register Spilling and Live-Range Splitting for SSA-Form Programs",
+booktitle="Compiler Construction",
+year="2009",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="174--189",
+abstract="Register allocation decides which parts of a variable's live range are held in registers and which in memory. The compiler inserts spill code to move the values of variables between registers and memory. Since fetching data from memory is much slower than reading directly from a register, careful spill code insertion is critical for the performance of the compiled program.",
+isbn="978-3-642-00722-4"
+}
+
+@inproceedings{koes:09,
+author = {Koes, David Ryan and Goldstein, Seth Copen},
+title = {Register Allocation Deconstructed},
+year = {2009},
+isbn = {9781605586960},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1543820.1543824},
+doi = {10.1145/1543820.1543824},
+abstract = {Register allocation is a fundamental part of any optimizing compiler. Effectively managing the limited register resources of the constrained architectures commonly found in embedded systems is essential in order to maximize code quality. In this paper we deconstruct the register allocation problem into distinct components: coalescing, spilling, move insertion, and assignment. Using an optimal register allocation framework, we empirically evaluate the importance of each of the components, the impact of component integration, and the effectiveness of existing heuristics. We evaluate code quality both in terms of code performance and code size and consider four distinct instruction set architectures: ARM, Thumb, x86, and x86-64. The results of our investigation reveal general principles for register allocation design.},
+booktitle = {Proceedings of Th 12th International Workshop on Software and Compilers for Embedded Systems},
+pages = {21–30},
+numpages = {10},
+keywords = {register allocation},
+location = {Nice, France},
+series = {SCOPES '09}
+}
+
+@article{cooper:94,
+author = {Briggs, Preston and Cooper, Keith D. and Torczon, Linda},
+title = {Improvements to Graph Coloring Register Allocation},
+year = {1994},
+issue_date = {May 1994},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {16},
+number = {3},
+issn = {0164-0925},
+url = {https://doi.org/10.1145/177492.177575},
+doi = {10.1145/177492.177575},
+abstract = {We describe two improvements to Chaitin-style graph coloring register allocators. The first, optimistic coloring, uses a stronger heuristic to find a k-coloring for the interference graph. The second extends Chaitin's treatment of rematerialization to handle a larger class of values. These techniques are complementary. Optimistic coloring decreases the number of procedures that require spill code and reduces the amount of spill code when spilling is unavoidable. Rematerialization lowers the cost of spilling some values. This paper describes both of the techniques and our experience building and using register allocators that incorporate them. It provides a detailed description of optimistic coloring and rematerialization. It presents experimental data to show the performance of several versions of the register allocator on a suite of FORTRAN programs. It discusses several insights that we discovered only after repeated implementation of these allocators.},
+journal = {ACM Trans. Program. Lang. Syst.},
+month = {may},
+pages = {428–455},
+numpages = {28},
+keywords = {code generation, register allocation, graph coloring}
+}
+
+@article{callahan:91,
+  title={Register allocation via hierarchical graph coloring},
+  author={Callahan, David and Koblenz, Brian},
+  journal={ACM Sigplan Notices},
+  volume={26},
+  number={6},
+  pages={192--203},
+  year={1991},
+  publisher={ACM New York, NY, USA}
+}
+
+@article{lawler:76,
+title = {A note on the complexity of the chromatic number problem},
+journal = {Information Processing Letters},
+volume = {5},
+number = {3},
+pages = {66-67},
+year = {1976},
+issn = {0020-0190},
+doi = {https://doi.org/10.1016/0020-0190(76)90065-X},
+url = {https://www.sciencedirect.com/science/article/pii/002001907690065X},
+author = {E.L. Lawler},
+keywords = {Graph, algorithm, chromatic number, complexity}
+}
+
+@article{bjorklund:09,
+author = {Bj\"{o}rklund, Andreas and Husfeldt, Thore and Koivisto, Mikko},
+title = {Set Partitioning via Inclusion-Exclusion},
+journal = {SIAM Journal on Computing},
+volume = {39},
+number = {2},
+pages = {546-563},
+year = {2009},
+doi = {10.1137/070683933},
+URL = {https://doi.org/10.1137/070683933},
+eprint = {https://doi.org/10.1137/070683933},
+abstract = { Given a set N with n elements and a family \$\mathcal{F}\$ of subsets, we show how to partition N into k such subsets in \$2^n n^{O(1)}\$ time. We also consider variations of this problem where the subsets may overlap or are weighted, and we solve the decision, counting, summation, and optimization versions of these problems. Our algorithms are based on the principle of inclusion-exclusion and the zeta transform. In effect we get exact algorithms in \$2^n n^{O(1)}\$ time for several well-studied partition problems including domatic number, chromatic number, maximum k-cut, bin packing, list coloring, and the chromatic polynomial. We also have applications to Bayesian learning with decision graphs and to model-based data clustering. If only polynomial space is available, our algorithms run in time \$3^n n^{O(1)}\$ if membership in \$\mathcal{F}\$ can be decided in polynomial time. We solve chromatic number in \$O(2.2461^n)\$ time and domatic number in \$O(2.8718^n)\$ time. Finally, we present a family of polynomial space approximation algorithms that find a number between \$\chi(G)\$ and \$\lceil(1+\epsilon)\chi(G)\rceil\$ in time \$O(1.2209^n+2.2461^{e^{-\epsilon}n})\$. }
+}
+
+@article{10.1145/74818.74843,
+author = {Briggs, P. and Cooper, K. D. and Kennedy, K. and Torczon, L.},
+title = {Coloring  Heuristics for Register Allocation},
+year = {1989},
+issue_date = {July 1989},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {24},
+number = {7},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/74818.74843},
+doi = {10.1145/74818.74843},
+abstract = {We describe an improvement to a heuristic introduced by Chaitin for use in graph coloring register allocation. Our modified heuristic produces better colorings, with less spill code. It has similar compile-time and implementation requirements. We present experimental data to compare the two methods.},
+journal = {SIGPLAN Not.},
+month = {jun},
+pages = {275–284},
+numpages = {10}
+}
+
+@inproceedings{briggs:89,
+author = {Briggs, P. and Cooper, K. D. and Kennedy, K. and Torczon, L.},
+title = {Coloring  Heuristics for Register Allocation},
+year = {1989},
+isbn = {089791306X},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/73141.74843},
+doi = {10.1145/73141.74843},
+abstract = {We describe an improvement to a heuristic introduced by Chaitin for use in graph coloring register allocation. Our modified heuristic produces better colorings, with less spill code. It has similar compile-time and implementation requirements. We present experimental data to compare the two methods.},
+booktitle = {Proceedings of the ACM SIGPLAN 1989 Conference on Programming Language Design and Implementation},
+pages = {275–284},
+numpages = {10},
+location = {Portland, Oregon, USA},
+series = {PLDI '89}
+}
+
+@article{poletto:99,
+author = {Poletto, Massimiliano and Sarkar, Vivek},
+title = {Linear Scan Register Allocation},
+year = {1999},
+issue_date = {Sept. 1999},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {21},
+number = {5},
+issn = {0164-0925},
+url = {https://doi.org/10.1145/330249.330250},
+doi = {10.1145/330249.330250},
+abstract = {We describe a new algorithm for fast global register allocation called linear scan. This algorithm is not based on graph coloring, but allocates registers to variables in a single linear-time scan of the variables' live ranges. The linear scan algorithm is considerably faster than algorithms based on graph coloring, is simple to implement, and results in code that is almost as efficient as that obtained using more complex and time-consuming register allocators based on graph coloring. The algorithm is of interest in applications where compile time is a concern, such as dynamic compilation systems, “just-in-time” compilers, and interactive development environments.},
+journal = {ACM Trans. Program. Lang. Syst.},
+month = {sep},
+pages = {895–913},
+numpages = {19},
+keywords = {compilers, code optimization, register allocation}
+}
+
+@inproceedings{johansson:01,
+  title={Linear scan register allocation in a high-performance erlang compiler},
+  author={Johansson, Erik and Sagonas, Konstantinos},
+  booktitle={International Symposium on Practical Aspects of Declarative Languages},
+  pages={101--119},
+  year={2001},
+  organization={Springer}
+}
+
+@inproceedings{traub:98,
+author = {Traub, Omri and Holloway, Glenn and Smith, Michael D.},
+title = {Quality and Speed in Linear-Scan Register Allocation},
+year = {1998},
+isbn = {0897919874},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/277650.277714},
+doi = {10.1145/277650.277714},
+abstract = {A linear-scan algorithm directs the global allocation of register candidates to registers based on a simple linear sweep over the program being compiled. This approach to register allocation makes sense for systems, such as those for dynamic compilation, where compilation speed is important. In contrast, most commercial and research optimizing compilers rely on a graph-coloring approach to global register allocation. In this paper, we compare the performance of a linear-scan method against a modern graph-coloring method. We implement both register allocators within the Machine SUIF extension of the Stanford SUIF compiler system. Experimental results show that linear scan is much faster than coloring on benchmarks with large numbers of register candidates. We also describe improvements to the linear-scan approach that do not change its linear character, but allow it to produce code of a quality near to that produced by graph coloring.},
+booktitle = {Proceedings of the ACM SIGPLAN 1998 Conference on Programming Language Design and Implementation},
+pages = {142–151},
+numpages = {10},
+keywords = {binpacking, global register allocation, graph coloring, linear scan},
+location = {Montreal, Quebec, Canada},
+series = {PLDI '98}
+}
+
+@article{scholz:02,
+author = {Scholz, Bernhard and Eckstein, Erik},
+title = {Register Allocation for Irregular Architectures},
+year = {2002},
+issue_date = {July 2002},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {37},
+number = {7},
+issn = {0362-1340},
+url = {https://doi.org/10.1145/566225.513854},
+doi = {10.1145/566225.513854},
+abstract = {For irregular architectures global register allocation is still a challenging problem that has not been successfully solved so far. The graph-coloring analogy of traditional approaches does not match the needs of register allocation for such architectures which feature non-orthogonal instruction sets and small register files. This work proposes a fundamentally new approach to global register allocation for irregular architectures. Our approach formulates global allocation as a partitioned boolean quadratic optimization problem (PBQP) that allows generic modeling of processors peculiarities. Because PBQP is NP-complete we present a heuristic that exhibits a nearly linear run-time complexity.We integrated our register allocator with the Infineon Carmel C Compiler which is based on the Open Compiler Environment from Atair Software. A DSP benchmark suite was used to compare the performance of our register allocator with a graph-coloring approach and with an optimal allocation. The experiments show that our new approach performs better than a traditional graph coloring approach for irregular architectures.},
+journal = {SIGPLAN Not.},
+month = {jun},
+pages = {139–148},
+numpages = {10},
+keywords = {boolean quadratic problem, register allocation}
+}
+
+@inproceedings{hames:06,
+  title={Nearly optimal register allocation with PBQP},
+  author={Hames, Lang and Scholz, Bernhard},
+  booktitle={Joint Modular Languages Conference},
+  pages={346--361},
+  year={2006},
+  organization={Springer}
+}
+
+@inproceedings{buchwald:11,
+  title={SSA-based register allocation with PBQP},
+  author={Buchwald, Sebastian and Zwinkau, Andreas and Bersch, Thomas},
+  booktitle={Compiler Construction: 20th International Conference, CC 2011, Held as Part of the Joint European Conferences on Theory and Practice of Software, ETAPS 2011, Saarbr{\"u}cken, Germany, March 26--April 3, 2011. Proceedings 20},
+  pages={42--61},
+  year={2011},
+  organization={Springer}
+}
+
+@inproceedings{buchwald:10,
+author = {Buchwald, Sebastian and Zwinkau, Andreas},
+title = {Instruction Selection by Graph Transformation},
+year = {2010},
+isbn = {9781605589039},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1878921.1878926},
+doi = {10.1145/1878921.1878926},
+abstract = {Common generated instruction selections are based on tree pattern matching, but modern and custom architectures feature instructions, which cannot be covered by trees. To overcome this limitation, we are the first to employ graph transformation, the natural generalization of tree rewriting. Currently, the only approach allowing us to pair graph-based instruction selection with linear time complexity is the mapping to the Partitioned Boolean Quadratic Problem (PBQP). We present formal foundations to verify this approach and therewith identify two problems of the common method and resolve them. We confirm the capabilities of PBQP-based instruction selection by a comparison with a finely-tuned hand-written instruction selection.},
+booktitle = {Proceedings of the 2010 International Conference on Compilers, Architectures and Synthesis for Embedded Systems},
+pages = {31–40},
+numpages = {10},
+keywords = {instruction selection},
+location = {Scottsdale, Arizona, USA},
+series = {CASES '10}
+}
+
+@inproceedings{eckstein:03,
+  title={Code instruction selection based on SSA-graphs},
+  author={Eckstein, Erik and K{\"o}nig, Oliver and Scholz, Bernhard},
+  booktitle={International Workshop on Software and Compilers for Embedded Systems},
+  pages={49--65},
+  year={2003},
+  organization={Springer}
+}
+
+@inproceedings{wimmer:10,
+author = {Wimmer, Christian and Franz, Michael},
+title = {Linear Scan Register Allocation on SSA Form},
+year = {2010},
+isbn = {9781605586359},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/1772954.1772979},
+doi = {10.1145/1772954.1772979},
+abstract = {The linear scan algorithm for register allocation provides a good register assignment with a low compilation overhead and is thus frequently used for just-in-time compilers. Although most of these compilers use static single assignment (SSA) form, the algorithm has not yet been applied on SSA form, i.e., SSA form is usually deconstructed before register allocation. However, the structural properties of SSA form can be used to simplify the algorithm.With only one definition per variable, lifetime intervals (the main data structure) can be constructed without data flow analysis. During allocation, some tests of interval intersection can be skipped because SSA form guarantees non-intersection. Finally, deconstruction of SSA form after register allocation can be integrated into the resolution phase of the register allocator without much additional code.We modified the linear scan register allocator of the Java HotSpot client compiler so that it operates on SSA form. The evaluation shows that our simpler and faster version generates equally good or slightly better machine code.},
+booktitle = {Proceedings of the 8th Annual IEEE/ACM International Symposium on Code Generation and Optimization},
+pages = {170–179},
+numpages = {10},
+keywords = {Java, register allocation, just-in-time compilation, SSA form, lifetime analysis, SSA form deconstruction, linear scan},
+location = {Toronto, Ontario, Canada},
+series = {CGO '10}
+}
+
+@article{wimmer:04,
+  title={Linear scan register allocation for the Java HotSpotTM client compiler},
+  author={Wimmer, Christian},
+  journal={Master's thesis, Johannes Kepler University Linz},
+  year={2004}
+}
+
+@book{golumbic:04,
+  title={Algorithmic graph theory and perfect graphs},
+  author={Golumbic, Martin Charles},
+  year={2004},
+  publisher={Elsevier}
+}
+
+@article{dagan:88,
+  title={Trapezoid graphs and their coloring},
+  author={Dagan, Ido and Golumbic, Martin Charles and Pinter, Ron Yair},
+  journal={Discrete Applied Mathematics},
+  volume={21},
+  number={1},
+  pages={35--46},
+  year={1988},
+  publisher={Elsevier}
+}
+
+@misc{rogers:20,
+      title={Efficient global register allocation}, 
+      author={Ian Rogers},
+      year={2020},
+      eprint={2011.05608},
+      archivePrefix={arXiv},
+      primaryClass={cs.PL}
+}
+
+@article{wegman:91,
+  title={Constant propagation with conditional branches},
+  author={Wegman, Mark N and Zadeck, F Kenneth},
+  journal={ACM Transactions on Programming Languages and Systems (TOPLAS)},
+  volume={13},
+  number={2},
+  pages={181--210},
+  year={1991},
+  publisher={ACM New York, NY, USA}
+}
+
+@inproceedings{chow:84,
+  title={Register allocation by priority-based coloring},
+  author={Chow, Frederick and Hennessy, John},
+  booktitle={Proceedings of the 1984 SIGPLAN symposium on Compiler construction},
+  pages={222--232},
+  year={1984}
+}
