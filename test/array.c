@@ -9,6 +9,8 @@ struct array {
                 size;
   int bucket, 
       index;
+
+  int element_size;
 };
 
 inline static int get_bucket(unsigned long index) {
@@ -29,7 +31,7 @@ inline static unsigned long get_head(int bucket, int index) {
   return (1 << bucket) - 1 + index;
 }
 
-array array_new() {
+array array_new(int element_size) {
   array a = (array) malloc(sizeof(struct array));
   a->capacity = 1;
   a->bucket = 0;
@@ -37,6 +39,8 @@ array array_new() {
   a->size = 0;
   a->data = (void***) malloc(sizeof(void**) * 32);
   a->data[a->bucket] = (void**) malloc(sizeof(void*) * a->capacity);
+
+  a->element_size = element_size;
 
   return a;
 }
