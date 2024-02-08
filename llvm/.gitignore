@@ -1,0 +1,6 @@
+.cache
+build
+build-debug
+compiler-rt
+install
+llvm-debug-install
