@@ -292,6 +292,12 @@ void RAGreedy::enqueue(PQueue &CurQueue, const LiveInterval *LI) {
 
   unsigned Ret = PriorityAdvisor->getPriority(*LI);
 
+  /*
+  1. CALCULAR ESTATÍSTICAS SOBRE O LIVEINTERVAL LI
+  2. INSTANCIAR VARIÁVEIS COM CAPTURANDO AS ESTATÍSTICAS EM UM LAMBDA
+  3. AVALIAR A EXPRESSÃO
+  */
+
   // The virtual register number is a tie breaker for same-sized ranges.
   // Give lower vreg numbers higher priority to assign them first.
   CurQueue.push(std::make_pair(Ret, ~Reg));

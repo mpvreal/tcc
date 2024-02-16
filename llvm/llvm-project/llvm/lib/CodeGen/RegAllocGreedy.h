@@ -157,7 +157,9 @@ public:
 
 private:
   // Convenient shortcuts.
-  using PQueue = std::priority_queue<std::pair<unsigned, unsigned>>;
+  using PQueue = std::priority_queue<std::pair<double, unsigned>, 
+                                     std::vector<std::pair<double, unsigned>>,
+                                     std::greater<std::pair<double, unsigned>>>;
   using SmallLISet = SmallSetVector<const LiveInterval *, 4>;
 
   // We need to track all tentative recolorings so we can roll back any

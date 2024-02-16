@@ -14,6 +14,7 @@
 #include "AllocationOrder.h"
 #include "LiveDebugVariables.h"
 #include "RegAllocBase.h"
+#include "GenExprCompiler.h"
 #include "llvm/Analysis/AliasAnalysis.h"
 #include "llvm/CodeGen/CalcSpillWeights.h"
 #include "llvm/CodeGen/LiveIntervals.h"
@@ -32,6 +33,8 @@
 #include "llvm/Support/Debug.h"
 #include "llvm/Support/raw_ostream.h"
 #include <queue>
+#include <utility>
+#include <fstream>
 
 using namespace llvm;
 
@@ -57,18 +60,25 @@ namespace {
 class RABasic : public MachineFunctionPass,
                 public RegAllocBase,
                 private LiveRangeEdit::Delegate {
-  // context
+  using PQueue = std::priority_queue<std::pair<double, unsigned>, 
+                                     std::vector<std::pair<double, unsigned>>,
+                                     std::greater<std::pair<double, unsigned>>>;
+  // using PQueue = std::priority_queue<const LiveInterval *, std::vector<const LiveInterval *>,
+  //                                    CompSpillWeight>;
   MachineFunction *MF;
 
   // state
   std::unique_ptr<Spiller> SpillerInstance;
-  std::priority_queue<const LiveInterval *, std::vector<const LiveInterval *>,
-                      CompSpillWeight>
-      Queue;
+  PQueue Queue;
+  std::unique_ptr<GenExprTree> LiveRegPriorityFunction;
 
   // Scratch space.  Allocated here to avoid repeated malloc calls in
   // selectOrSplit().
   BitVector UsableRegs;
+
+  double IntervalSpillArea;
+  double IntervalCost;
+  unsigned IntervalDeg;
 
   bool LRE_CanEraseVirtReg(Register) override;
   void LRE_WillShrinkVirtReg(Register) override;
@@ -86,13 +96,75 @@ public:
 
   Spiller &spiller() override { return *SpillerInstance; }
 
-  void enqueueImpl(const LiveInterval *LI) override { Queue.push(LI); }
+  void enqueueImpl(const LiveInterval *LI) override { 
+    const Register Reg = LI->reg();
+    MachineRegisterInfo &MRI = MF->getRegInfo();
+
+    /*
+    1. CALCULAR ESTATÍSTICAS SOBRE O LIVEINTERVAL LI
+    2. INSTANCIAR VARIÁVEIS COM CAPTURANDO AS ESTATÍSTICAS EM UM LAMBDA
+    3. AVALIAR A EXPRESSÃO
+    */
+    IntervalSpillArea = calcSpillArea(LI, MRI, getAnalysis<MachineLoopInfo>());
+    IntervalDeg = calcIntervalDeg(LI, MRI);
+    IntervalCost = LI->weight();
+    
+    double Priority = LiveRegPriorityFunction->evaluate();
+
+    Queue.push(std::make_pair(Priority, ~Reg));
+  }
+
+  double calcSpillArea(const LiveInterval *LI, 
+                       const MachineRegisterInfo &MRI,
+                       const MachineLoopInfo &MLI) {
+    double SpillArea = 0.0;
+    
+    for (auto I = MRI.reg_instr_nodbg_begin(LI->reg()), E = MRI.reg_instr_nodbg_end(); I != E;) {
+      MachineInstr *MI = &*(I++);
+      SlotIndex MIIndex = LIS->getInstructionIndex(*MI);
+
+      if (MI->isInlineAsm())
+        continue;
+
+      unsigned ExponentResult = 1; // Resultado da expressão 5^Depth(LI)
+      MachineLoop* MILoop = MLI.getLoopFor(MI->getParent());
+      unsigned Depth = MILoop != nullptr ? MILoop->getLoopDepth() : 0; // Depth(LI)
+
+      while (Depth > 0) {
+        ExponentResult *= 5;
+        Depth--;
+      }
+
+      unsigned LiveAtLI = 0;
+
+      for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
+        Register Reg = Register::index2VirtReg(i);
+
+        LiveAtLI += (unsigned) LIS->getInterval(Reg).liveAt(MIIndex);
+      }
+
+      SpillArea += ExponentResult * LiveAtLI;
+    }
+
+    return SpillArea;
+  }
+
+  unsigned calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI) {
+    unsigned Degree;
+
+    for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
+      Degree += (unsigned) LI->overlaps(LIS->getInterval(Register::index2VirtReg(i)));
+    }
+
+    return Degree;
+  }
 
   const LiveInterval *dequeue() override {
     if (Queue.empty())
       return nullptr;
-    const LiveInterval *LI = Queue.top();
+    const LiveInterval *LI = &LIS->getInterval(~Queue.top().second);
     Queue.pop();
+
     return LI;
   }
 
@@ -314,9 +386,26 @@ bool RABasic::runOnMachineFunction(MachineFunction &mf) {
   RegAllocBase::init(getAnalysis<VirtRegMap>(),
                      getAnalysis<LiveIntervals>(),
                      getAnalysis<LiveRegMatrix>());
+
   VirtRegAuxInfo VRAI(*MF, *LIS, *VRM, getAnalysis<MachineLoopInfo>(),
                       getAnalysis<MachineBlockFrequencyInfo>());
   VRAI.calculateSpillWeightsAndHints();
+
+  std::ifstream Expr("/home/mpvreal/Code/Faculdade/tcc/deap/HeuristicFunction.txt");
+  std::string LineFromFile;
+  std::getline(Expr, LineFromFile);
+  GenExprCompiler ExprCompiler;
+  LiveRegPriorityFunction = ExprCompiler.compile(LineFromFile);
+
+  LiveRegPriorityFunction->setVariable("area", [&IntervalSpillArea = IntervalSpillArea]() { 
+    return IntervalSpillArea; 
+  });
+  LiveRegPriorityFunction->setVariable("degree", [&IntervalDeg = IntervalDeg]() { 
+    return IntervalDeg; 
+  });
+  LiveRegPriorityFunction->setVariable("cost", [&IntervalCost = IntervalCost]() { 
+    return IntervalCost; 
+  });
 
   SpillerInstance.reset(createInlineSpiller(*this, *MF, *VRM, VRAI));
 
