@@ -29,8 +29,8 @@ class GenExprTree {
   void nodeToGraphviz();
 
   public:
-  GenExprTree(const std::string& label, std::vector<std::unique_ptr<GenExprTree>>& operands);
-  GenExprTree(const std::string& label);
+  GenExprTree(std::string label, std::vector<std::unique_ptr<GenExprTree>>& operands);
+  GenExprTree(std::string label);
   GenExprTree(double value);
   GenExprTree(int value);
   GenExprTree(const GenExprTree& other);

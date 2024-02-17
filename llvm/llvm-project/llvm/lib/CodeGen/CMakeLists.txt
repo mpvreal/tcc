@@ -68,6 +68,7 @@ add_llvm_component_library(LLVMCodeGen
   GCMetadata.cpp
   GCMetadataPrinter.cpp
   GCRootLowering.cpp
+  GenExprCompiler.cpp
   GlobalMerge.cpp
   HardwareLoops.cpp
   IfConversion.cpp

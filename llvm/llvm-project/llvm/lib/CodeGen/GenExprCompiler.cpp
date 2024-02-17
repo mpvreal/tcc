@@ -39,7 +39,7 @@ enum GenExprCompiler::ExprToken GenExprCompiler::getNextToken() {
     return ERROR;
 
   tokenValue.clear();
-  unsigned nextState = TRANSITIONS[INITIAL_STATE][input.at(cursor)];
+  unsigned nextState = TRANSITIONS[INITIAL_STATE][(unsigned) input.at(cursor)];
 
   while (nextState != ERROR_STATE && cursor < input.size()) {
     if (IS_FINAL_STATE(nextState)) {
@@ -52,7 +52,7 @@ enum GenExprCompiler::ExprToken GenExprCompiler::getNextToken() {
     ++cursor;
 
     if (cursor < input.size())
-      nextState = TRANSITIONS[currentState][input.at(cursor)];
+      nextState = TRANSITIONS[currentState][(unsigned) input.at(cursor)];
   }
 
   cursor = checkpoint + 1;
@@ -69,7 +69,9 @@ inline std::unique_ptr<GenExprTree> GenExprCompiler::buildAbstractSyntaxTree() {
 }
 
 std::unique_ptr<GenExprTree> GenExprCompiler::expression(enum ExprToken token) {
-  std::string tokenValue = this->tokenValue;
+  std::string tokenValue(this->tokenValue);
+  std::cerr << "Expression :: id = " << tokenValue << std::endl;
+
   switch (token) {
     case ID:
       return call(getNextToken(), tokenValue);
@@ -91,17 +93,18 @@ std::unique_ptr<GenExprTree> GenExprCompiler::call(enum ExprToken token, const s
 
     return std::make_unique<GenExprTree>(id, args);
   }
+  std::cerr << "Call :: id = " << id << std::endl;
 
   return std::make_unique<GenExprTree>(id);
 }
 
 std::vector<std::unique_ptr<GenExprTree>> GenExprCompiler::arguments(enum ExprToken token) {
   std::vector<std::unique_ptr<GenExprTree>> args;
-  args.push_back(std::move(expression(token)));
+  args.push_back(expression(token));
   token = getCurrentToken();
 
   while(token == COMMA) {
-    args.push_back(std::move(expression(getNextToken())));
+    args.push_back(expression(getNextToken()));
     token = getCurrentToken();
   }
 
@@ -194,7 +197,7 @@ void GenExprTree::toGraphviz() {
   std::cout << "}" << std::endl;
 }
 
-GenExprTree::GenExprTree(const std::string& label, 
+GenExprTree::GenExprTree(std::string label, 
                          std::vector<std::unique_ptr<GenExprTree>>& operands) {
   tag = OPERATION;
   data.operation.label = label;
@@ -204,9 +207,10 @@ GenExprTree::GenExprTree(const std::string& label,
   }
 }
 
-GenExprTree::GenExprTree(const std::string& label) {
+GenExprTree::GenExprTree(std::string label) {
+  std::cerr << "Constructing Variable :: label = " << label << std::endl;
   tag = VARIABLE;
-  data.variable = label;
+  data.variable = std::string(label);
 }
 
 GenExprTree::GenExprTree(double value) {

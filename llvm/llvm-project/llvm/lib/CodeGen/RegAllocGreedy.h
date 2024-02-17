@@ -12,6 +12,7 @@
 #ifndef LLVM_CODEGEN_REGALLOCGREEDY_H_
 #define LLVM_CODEGEN_REGALLOCGREEDY_H_
 
+#include "GenExprCompiler.h"
 #include "InterferenceCache.h"
 #include "RegAllocBase.h"
 #include "RegAllocEvictionAdvisor.h"
@@ -283,6 +284,18 @@ private:
   bool RegClassPriorityTrumpsGlobalness;
 
   bool ReverseLocalAssignment;
+
+  double calcSpillArea(const LiveInterval *LI, 
+                       const MachineRegisterInfo &MRI,
+                       const MachineLoopInfo *MLI);
+
+  unsigned calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI);
+
+  double IntervalSpillArea;
+  double IntervalCost;
+  unsigned IntervalDeg;
+
+  std::unique_ptr<GenExprTree> LiveRegPriorityFunction;
 
 public:
   RAGreedy(const RegClassFilterFunc F = allocateAllRegClasses);

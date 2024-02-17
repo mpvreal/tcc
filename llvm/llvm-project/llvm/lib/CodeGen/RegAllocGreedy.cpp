@@ -74,6 +74,7 @@
 #include <cassert>
 #include <cstdint>
 #include <utility>
+#include <fstream>
 
 using namespace llvm;
 
@@ -276,6 +277,51 @@ void RAGreedy::releaseMemory() {
   GlobalCand.clear();
 }
 
+double RAGreedy::calcSpillArea(const LiveInterval *LI, 
+                               const MachineRegisterInfo &MRI,
+                               const MachineLoopInfo *MLI) {
+  double SpillArea = 0.0;
+  
+  for (auto I = MRI.reg_instr_nodbg_begin(LI->reg()), E = MRI.reg_instr_nodbg_end(); I != E;) {
+    MachineInstr *MI = &*(I++);
+    SlotIndex MIIndex = LIS->getInstructionIndex(*MI);
+
+    if (MI->isInlineAsm())
+      continue;
+
+    unsigned ExponentResult = 1; // Resultado da expressão 5^Depth(LI)
+    MachineLoop* MILoop = MLI->getLoopFor(MI->getParent());
+    unsigned Depth = MILoop != nullptr ? MILoop->getLoopDepth() : 0; // Depth(LI)
+
+    while (Depth > 0) {
+      ExponentResult *= 5;
+      Depth--;
+    }
+
+    unsigned LiveAtLI = 0;
+
+    for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
+      Register Reg = Register::index2VirtReg(i);
+
+      LiveAtLI += (unsigned) LIS->getInterval(Reg).liveAt(MIIndex);
+    }
+
+    SpillArea += ExponentResult * LiveAtLI;
+  }
+
+  return SpillArea;
+}
+
+unsigned RAGreedy::calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI) {
+  unsigned Degree = 0;
+
+  for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
+    Degree += (unsigned) LI->overlaps(LIS->getInterval(Register::index2VirtReg(i)));
+  }
+
+  return Degree;
+}
+
 void RAGreedy::enqueueImpl(const LiveInterval *LI) { enqueue(Queue, LI); }
 
 void RAGreedy::enqueue(PQueue &CurQueue, const LiveInterval *LI) {
@@ -284,19 +330,26 @@ void RAGreedy::enqueue(PQueue &CurQueue, const LiveInterval *LI) {
   const Register Reg = LI->reg();
   assert(Reg.isVirtual() && "Can only enqueue virtual registers");
 
+  const MachineRegisterInfo &MRI = MF->getRegInfo();
+
   auto Stage = ExtraInfo->getOrInitStage(Reg);
   if (Stage == RS_New) {
     Stage = RS_Assign;
     ExtraInfo->setStage(Reg, Stage);
   }
 
-  unsigned Ret = PriorityAdvisor->getPriority(*LI);
-
   /*
   1. CALCULAR ESTATÍSTICAS SOBRE O LIVEINTERVAL LI
   2. INSTANCIAR VARIÁVEIS COM CAPTURANDO AS ESTATÍSTICAS EM UM LAMBDA
   3. AVALIAR A EXPRESSÃO
   */
+  IntervalSpillArea = calcSpillArea(LI, MRI, &getAnalysis<MachineLoopInfo>());
+  IntervalDeg = calcIntervalDeg(LI, MRI);
+  IntervalCost = LI->weight();
+  double Ret = LiveRegPriorityFunction->evaluate();
+
+  LLVM_DEBUG(dbgs() << "Registrador: " << printReg(Reg, TRI) 
+        << " com prioridade " << Ret << "\n");
 
   // The virtual register number is a tie breaker for same-sized ranges.
   // Give lower vreg numbers higher priority to assign them first.
@@ -2607,7 +2660,7 @@ bool RAGreedy::hasVirtRegAlloc() {
 }
 
 bool RAGreedy::runOnMachineFunction(MachineFunction &mf) {
-  LLVM_DEBUG(dbgs() << "********** GREEDY REGISTER ALLOCATION **********\n"
+  LLVM_DEBUG(dbgs() << "********** GREEDY REGISTER ALLOCATION (modificado) **********\n"
                     << "********** Function: " << mf.getName() << '\n');
 
   MF = &mf;
@@ -2656,6 +2709,23 @@ bool RAGreedy::runOnMachineFunction(MachineFunction &mf) {
   SpillerInstance.reset(createInlineSpiller(*this, *MF, *VRM, *VRAI));
 
   VRAI->calculateSpillWeightsAndHints();
+
+  std::ifstream Expr("/home/mpvreal/Code/Faculdade/tcc/deap/HeuristicFunction.txt");
+  std::string LineFromFile;
+  std::getline(Expr, LineFromFile);
+  LLVM_DEBUG(dbgs() << "Função heurística escolhida: " << LineFromFile << '\n');
+  GenExprCompiler ExprCompiler;
+  LiveRegPriorityFunction = ExprCompiler.compile(LineFromFile);
+
+  LiveRegPriorityFunction->setVariable("area", [&IntervalSpillArea = IntervalSpillArea]() { 
+    return IntervalSpillArea; 
+  });
+  LiveRegPriorityFunction->setVariable("degree", [&IntervalDeg = IntervalDeg]() { 
+    return IntervalDeg; 
+  });
+  LiveRegPriorityFunction->setVariable("cost", [&IntervalCost = IntervalCost]() { 
+    return IntervalCost; 
+  });
 
   LLVM_DEBUG(LIS->dump());
 

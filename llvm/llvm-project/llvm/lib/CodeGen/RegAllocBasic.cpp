@@ -62,7 +62,7 @@ class RABasic : public MachineFunctionPass,
                 private LiveRangeEdit::Delegate {
   using PQueue = std::priority_queue<std::pair<double, unsigned>, 
                                      std::vector<std::pair<double, unsigned>>,
-                                     std::greater<std::pair<double, unsigned>>>;
+                                     std::less<std::pair<double, unsigned>>>;
   // using PQueue = std::priority_queue<const LiveInterval *, std::vector<const LiveInterval *>,
   //                                    CompSpillWeight>;
   MachineFunction *MF;
@@ -111,6 +111,9 @@ public:
     
     double Priority = LiveRegPriorityFunction->evaluate();
 
+    LLVM_DEBUG(dbgs() << "Registrador: " << printReg(Reg, TRI) 
+        << " com prioridade " << Priority << "\n");
+
     Queue.push(std::make_pair(Priority, ~Reg));
   }
 
@@ -150,7 +153,7 @@ public:
   }
 
   unsigned calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI) {
-    unsigned Degree;
+    unsigned Degree = 0;
 
     for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
       Degree += (unsigned) LI->overlaps(LIS->getInterval(Register::index2VirtReg(i)));
@@ -379,7 +382,7 @@ MCRegister RABasic::selectOrSplit(const LiveInterval &VirtReg,
 }
 
 bool RABasic::runOnMachineFunction(MachineFunction &mf) {
-  LLVM_DEBUG(dbgs() << "********** BASIC REGISTER ALLOCATION **********\n"
+  LLVM_DEBUG(dbgs() << "********** BASIC REGISTER ALLOCATION (modificado))) **********\n"
                     << "********** Function: " << mf.getName() << '\n');
 
   MF = &mf;
@@ -394,6 +397,7 @@ bool RABasic::runOnMachineFunction(MachineFunction &mf) {
   std::ifstream Expr("/home/mpvreal/Code/Faculdade/tcc/deap/HeuristicFunction.txt");
   std::string LineFromFile;
   std::getline(Expr, LineFromFile);
+  LLVM_DEBUG(dbgs() << "Função heurística escolhida: " << LineFromFile << '\n');
   GenExprCompiler ExprCompiler;
   LiveRegPriorityFunction = ExprCompiler.compile(LineFromFile);
 
