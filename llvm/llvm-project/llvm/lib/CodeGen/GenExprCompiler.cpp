@@ -1,5 +1,6 @@
 #include <cmath>
 #include <iostream>
+#include <fstream>
 #include <queue>
 
 #include "GenExprCompiler.h"
@@ -26,12 +27,27 @@ static const unsigned TRANSITIONS[][ALPHABET_SIZE] = {
 
 std::map<std::string, std::function<double()>> variables;
 
+GenExprCompiler::GenExprCompiler(const std::string& input) {
+  std::ifstream expr(input);
+  std::getline(expr, this->input);
+}
+
 std::unique_ptr<GenExprTree> GenExprCompiler::compile(const std::string& input) {
+  std::ifstream expr(input);
+  std::getline(expr, this->input);
+
+  return compile();
+}
+
+std::unique_ptr<GenExprTree> GenExprCompiler::compile() {
   currentState = INITIAL_STATE;
   lastToken = ERROR_STATE;
-  this->input = input;
 
   return buildAbstractSyntaxTree();
+}
+
+std::string GenExprCompiler::getInput() {
+  return input;
 }
 
 enum GenExprCompiler::ExprToken GenExprCompiler::getNextToken() {
@@ -69,18 +85,16 @@ inline std::unique_ptr<GenExprTree> GenExprCompiler::buildAbstractSyntaxTree() {
 }
 
 std::unique_ptr<GenExprTree> GenExprCompiler::expression(enum ExprToken token) {
-  std::string tokenValue(this->tokenValue);
-  std::cerr << "Expression :: id = " << tokenValue << std::endl;
-
+  std::string id = tokenValue;
   switch (token) {
     case ID:
-      return call(getNextToken(), tokenValue);
+      return call(getNextToken(), id);
     case INT:
       getNextToken();
-      return std::make_unique<GenExprTree>(std::stoi(tokenValue));
+      return std::make_unique<GenExprTree>(GenExprTree::INT_VALUE, id, nullptr, nullptr);
     case FLOAT:
       getNextToken();
-      return std::make_unique<GenExprTree>(std::stod(tokenValue));
+      return std::make_unique<GenExprTree>(GenExprTree::FLOAT_VALUE, id, nullptr, nullptr);
     default:
       return nullptr;
   }
@@ -88,50 +102,28 @@ std::unique_ptr<GenExprTree> GenExprCompiler::expression(enum ExprToken token) {
 
 std::unique_ptr<GenExprTree> GenExprCompiler::call(enum ExprToken token, const std::string& id) {
   if (token == LPAR) {
-    auto args = arguments(getNextToken());
+    auto left = expression(getNextToken());
+
+    if (getCurrentToken() == RPAR) {
+      getNextToken();
+
+      return std::make_unique<GenExprTree>(GenExprTree::OPERATION, id, std::move(left), nullptr);
+    }
+
+    auto right = expression(getNextToken());
     getNextToken();
 
-    return std::make_unique<GenExprTree>(id, args);
+    return std::make_unique<GenExprTree>(GenExprTree::OPERATION, 
+                                         id, 
+                                         std::move(left), 
+                                         std::move(right));
   }
-  std::cerr << "Call :: id = " << id << std::endl;
 
-  return std::make_unique<GenExprTree>(id);
+  return std::make_unique<GenExprTree>(GenExprTree::VARIABLE, id, nullptr, nullptr);
 }
 
-std::vector<std::unique_ptr<GenExprTree>> GenExprCompiler::arguments(enum ExprToken token) {
-  std::vector<std::unique_ptr<GenExprTree>> args;
-  args.push_back(expression(token));
-  token = getCurrentToken();
-
-  while(token == COMMA) {
-    args.push_back(expression(getNextToken()));
-    token = getCurrentToken();
-  }
-
-  return args;
-}
-
-GenExprTree::GenExprTree(const GenExprTree& other) {
-  tag = other.tag;
-  
-  switch (tag) {
-    case OPERATION:
-      data.operation.label = other.data.operation.label;
-
-      for (auto& operand : other.data.operation.operands) {
-        data.operation.operands.push_back(std::make_unique<GenExprTree>(*operand));
-      }
-      break;
-    case VARIABLE:
-      data.variable = other.data.variable;
-      break;
-    case FLOAT_VALUE:
-      data.floatValue = other.data.floatValue;
-      break;
-    case INT_VALUE:
-      data.intValue = other.data.intValue;
-      break;
-  }
+double GenExprTree::protectedDiv(double a, double b) {
+  return b == 0.0 ? 1.0 : a / b;
 }
 
 double GenExprTree::evaluate() {
@@ -139,26 +131,25 @@ double GenExprTree::evaluate() {
 
   switch (tag) {
     case OPERATION:
-      if (data.operation.label == "add") {
-        return data.operation.operands[0]->evaluate() + data.operation.operands[1]->evaluate();
-      } else if (data.operation.label == "sub") {
-        return data.operation.operands[0]->evaluate() - data.operation.operands[1]->evaluate();
-      } else if (data.operation.label == "mul") {
-        return data.operation.operands[0]->evaluate() * data.operation.operands[1]->evaluate();
-      } else if (data.operation.label == "div") {
-        return data.operation.operands[0]->evaluate() / data.operation.operands[1]->evaluate();
-      } else if (data.operation.label == "pow") {
-        return std::pow(data.operation.operands[0]->evaluate(), 
-                        data.operation.operands[1]->evaluate());
+      if (data == "add") {
+        return left->evaluate() + right->evaluate();
+      } else if (data == "sub") {
+        return left->evaluate() - right->evaluate();
+      } else if (data == "mul") {
+        return left->evaluate() * right->evaluate();
+      } else if (data == "div") {
+        return protectedDiv(left->evaluate(), right->evaluate());
+      } else if (data == "pow") {
+        return std::pow(left->evaluate(), right->evaluate());
       }
       break;
     case VARIABLE:
-      it = variables.find(data.variable);
+      it = variables.find(data);
       return it != variables.end() ? it->second() : 0.0;
     case FLOAT_VALUE:
-      return data.floatValue;
+      return std::stod(data);
     case INT_VALUE:
-      return data.intValue;
+      return std::stoi(data);
   }
 
   return 0.0;
@@ -171,22 +162,23 @@ void GenExprTree::setVariable(const std::string& variable, std::function<double(
 void GenExprTree::nodeToGraphviz() {
   switch (tag) {
     case OPERATION:
-      std::cout << "node" << this << " [label=\"" << data.operation.label << "\"]" << std::endl;  
+      std::cout << "node" << this << " [label=\"" << data << "\"]" << std::endl;  
 
-      for (auto& operand : data.operation.operands) {
-        operand->nodeToGraphviz();
-        std::cout << "node" << this << " -> node" << operand.get() << std::endl;
+      if(left != nullptr) {
+        left->nodeToGraphviz();
+        std::cout << "node" << this << " -> node" << left.get() << std::endl;
+      }
+
+      if (right != nullptr) {
+        right->nodeToGraphviz(); 
+        std::cout << "node" << this << " -> node" << right.get() << std::endl;
       }
 
       break;
     case VARIABLE:
-      std::cout << "node" << this << " [label=\"" << data.variable << "\"]" << std::endl;
-      break;
     case FLOAT_VALUE:
-      std::cout << "node" << this << " [label=\"" << data.floatValue << "\"]" << std::endl;
-      break;
     case INT_VALUE:
-      std::cout << "node" << this << " [label=\"" << data.intValue << "\"]" << std::endl;
+      std::cout << "node" << this << " [label=\"" << data << "\"]" << std::endl;
       break;
   }
 }
@@ -197,40 +189,11 @@ void GenExprTree::toGraphviz() {
   std::cout << "}" << std::endl;
 }
 
-GenExprTree::GenExprTree(std::string label, 
-                         std::vector<std::unique_ptr<GenExprTree>>& operands) {
-  tag = OPERATION;
-  data.operation.label = label;
-
-  for (auto& operand : operands) {
-    data.operation.operands.push_back(std::move(operand));
-  }
-}
-
-GenExprTree::GenExprTree(std::string label) {
-  std::cerr << "Constructing Variable :: label = " << label << std::endl;
-  tag = VARIABLE;
-  data.variable = std::string(label);
-}
-
-GenExprTree::GenExprTree(double value) {
-  tag = FLOAT_VALUE;
-  data.floatValue = value;
-}
-
-GenExprTree::GenExprTree(int value) {
-  tag = INT_VALUE;
-  data.intValue = value;
-}
-
 /******************* GRAMÁTICA: *******************/
 /*
  * expression ::= id call
  * expression ::= int
  * expression ::= float
- * call ::= ( args )
+ * call ::= ( expression, expression )
  * call ::= ''
- * args ::= expression arglist
- * arglist ::= , expression arglist
- * arglist ::= ''
  */

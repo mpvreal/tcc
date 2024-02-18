@@ -6,34 +6,28 @@
 #include <memory>
 #include <stack>
 #include <string>
-#include <vector>
 
 class GenExprTree {
   enum NodeType {
     OPERATION, VARIABLE, INT_VALUE, FLOAT_VALUE
   } tag;
 
-  union NodeData {
-    struct {
-      std::vector<std::unique_ptr<GenExprTree>> operands;
-      std::string label;
-    } operation;
-    std::string variable;
-    double floatValue;
-    int intValue;
+  std::string data;
+  std::unique_ptr<GenExprTree> left;
+  std::unique_ptr<GenExprTree> right;
 
-    NodeData() {};
-    ~NodeData() {};
-  } data;
-
+  static double protectedDiv(double a, double b);
   void nodeToGraphviz();
 
   public:
-  GenExprTree(std::string label, std::vector<std::unique_ptr<GenExprTree>>& operands);
-  GenExprTree(std::string label);
-  GenExprTree(double value);
-  GenExprTree(int value);
-  GenExprTree(const GenExprTree& other);
+  GenExprTree(NodeType tag, 
+              const std::string& data,
+              std::unique_ptr<GenExprTree> left, 
+              std::unique_ptr<GenExprTree> right)
+            : tag(tag), 
+              data(data), 
+              left(std::move(left)), 
+              right(std::move(right)) {};
   ~GenExprTree() {};
 
   double evaluate();
@@ -62,13 +56,15 @@ class GenExprCompiler {
   inline std::unique_ptr<GenExprTree> buildAbstractSyntaxTree();
   std::unique_ptr<GenExprTree> expression(enum ExprToken token);
   std::unique_ptr<GenExprTree> call(enum ExprToken token, const std::string& id);
-  std::vector<std::unique_ptr<GenExprTree>> arguments(enum ExprToken token);
   
   public:
+  GenExprCompiler(const std::string& input);
   GenExprCompiler() {};
   ~GenExprCompiler() {};
 
   std::unique_ptr<GenExprTree> compile(const std::string& input);
+  std::unique_ptr<GenExprTree> compile();
+  std::string getInput();
 };
 
 #endif

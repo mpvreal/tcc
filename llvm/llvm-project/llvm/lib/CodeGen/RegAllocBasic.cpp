@@ -70,15 +70,10 @@ class RABasic : public MachineFunctionPass,
   // state
   std::unique_ptr<Spiller> SpillerInstance;
   PQueue Queue;
-  std::unique_ptr<GenExprTree> LiveRegPriorityFunction;
 
   // Scratch space.  Allocated here to avoid repeated malloc calls in
   // selectOrSplit().
   BitVector UsableRegs;
-
-  double IntervalSpillArea;
-  double IntervalCost;
-  unsigned IntervalDeg;
 
   bool LRE_CanEraseVirtReg(Register) override;
   void LRE_WillShrinkVirtReg(Register) override;
@@ -105,7 +100,7 @@ public:
     2. INSTANCIAR VARIÁVEIS COM CAPTURANDO AS ESTATÍSTICAS EM UM LAMBDA
     3. AVALIAR A EXPRESSÃO
     */
-    IntervalSpillArea = calcSpillArea(LI, MRI, getAnalysis<MachineLoopInfo>());
+    IntervalSpillArea = calcSpillArea(LI, MRI, &getAnalysis<MachineLoopInfo>());
     IntervalDeg = calcIntervalDeg(LI, MRI);
     IntervalCost = LI->weight();
     
@@ -115,51 +110,6 @@ public:
         << " com prioridade " << Priority << "\n");
 
     Queue.push(std::make_pair(Priority, ~Reg));
-  }
-
-  double calcSpillArea(const LiveInterval *LI, 
-                       const MachineRegisterInfo &MRI,
-                       const MachineLoopInfo &MLI) {
-    double SpillArea = 0.0;
-    
-    for (auto I = MRI.reg_instr_nodbg_begin(LI->reg()), E = MRI.reg_instr_nodbg_end(); I != E;) {
-      MachineInstr *MI = &*(I++);
-      SlotIndex MIIndex = LIS->getInstructionIndex(*MI);
-
-      if (MI->isInlineAsm())
-        continue;
-
-      unsigned ExponentResult = 1; // Resultado da expressão 5^Depth(LI)
-      MachineLoop* MILoop = MLI.getLoopFor(MI->getParent());
-      unsigned Depth = MILoop != nullptr ? MILoop->getLoopDepth() : 0; // Depth(LI)
-
-      while (Depth > 0) {
-        ExponentResult *= 5;
-        Depth--;
-      }
-
-      unsigned LiveAtLI = 0;
-
-      for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
-        Register Reg = Register::index2VirtReg(i);
-
-        LiveAtLI += (unsigned) LIS->getInterval(Reg).liveAt(MIIndex);
-      }
-
-      SpillArea += ExponentResult * LiveAtLI;
-    }
-
-    return SpillArea;
-  }
-
-  unsigned calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI) {
-    unsigned Degree = 0;
-
-    for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
-      Degree += (unsigned) LI->overlaps(LIS->getInterval(Register::index2VirtReg(i)));
-    }
-
-    return Degree;
   }
 
   const LiveInterval *dequeue() override {
@@ -393,23 +343,6 @@ bool RABasic::runOnMachineFunction(MachineFunction &mf) {
   VirtRegAuxInfo VRAI(*MF, *LIS, *VRM, getAnalysis<MachineLoopInfo>(),
                       getAnalysis<MachineBlockFrequencyInfo>());
   VRAI.calculateSpillWeightsAndHints();
-
-  std::ifstream Expr("/home/mpvreal/Code/Faculdade/tcc/deap/HeuristicFunction.txt");
-  std::string LineFromFile;
-  std::getline(Expr, LineFromFile);
-  LLVM_DEBUG(dbgs() << "Função heurística escolhida: " << LineFromFile << '\n');
-  GenExprCompiler ExprCompiler;
-  LiveRegPriorityFunction = ExprCompiler.compile(LineFromFile);
-
-  LiveRegPriorityFunction->setVariable("area", [&IntervalSpillArea = IntervalSpillArea]() { 
-    return IntervalSpillArea; 
-  });
-  LiveRegPriorityFunction->setVariable("degree", [&IntervalDeg = IntervalDeg]() { 
-    return IntervalDeg; 
-  });
-  LiveRegPriorityFunction->setVariable("cost", [&IntervalCost = IntervalCost]() { 
-    return IntervalCost; 
-  });
 
   SpillerInstance.reset(createInlineSpiller(*this, *MF, *VRM, VRAI));
 

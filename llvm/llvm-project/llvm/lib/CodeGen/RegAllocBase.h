@@ -39,6 +39,7 @@
 #include "llvm/ADT/SmallPtrSet.h"
 #include "llvm/CodeGen/RegAllocCommon.h"
 #include "llvm/CodeGen/RegisterClassInfo.h"
+#include "GenExprCompiler.h"
 
 namespace llvm {
 
@@ -51,7 +52,7 @@ template<typename T> class SmallVectorImpl;
 class Spiller;
 class TargetRegisterInfo;
 class VirtRegMap;
-
+class MachineLoopInfo;
 /// RegAllocBase provides the register allocation driver and interface that can
 /// be extended to add interesting heuristics.
 ///
@@ -69,6 +70,11 @@ protected:
   LiveRegMatrix *Matrix = nullptr;
   RegisterClassInfo RegClassInfo;
   const RegClassFilterFunc ShouldAllocateClass;
+  std::unique_ptr<GenExprTree> LiveRegPriorityFunction;
+
+  double IntervalSpillArea;
+  double IntervalCost;
+  unsigned IntervalDeg;
 
   /// Inst which is a def of an original reg and whose defs are already all
   /// dead after remat is saved in DeadRemats. The deletion of such inst is
@@ -117,6 +123,12 @@ protected:
 
   /// Method called when the allocator is about to remove a LiveInterval.
   virtual void aboutToRemoveInterval(const LiveInterval &LI) {}
+
+  double calcSpillArea(const LiveInterval *LI, 
+                                      const MachineRegisterInfo &MRI,
+                                      const MachineLoopInfo *MLI);
+
+  unsigned calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI);
 
 public:
   /// VerifyEnabled - True when -verify-regalloc is given.

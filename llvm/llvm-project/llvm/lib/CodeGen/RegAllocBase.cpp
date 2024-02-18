@@ -29,7 +29,9 @@
 #include "llvm/Support/ErrorHandling.h"
 #include "llvm/Support/Timer.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/CodeGen/MachineLoopInfo.h"
 #include <cassert>
+#include <fstream>
 
 using namespace llvm;
 
@@ -63,6 +65,23 @@ void RegAllocBase::init(VirtRegMap &vrm, LiveIntervals &lis,
   Matrix = &mat;
   MRI->freezeReservedRegs(vrm.getMachineFunction());
   RegClassInfo.runOnMachineFunction(vrm.getMachineFunction());
+
+  // std::ifstream Expr("/home/mpvreal/Code/Faculdade/tcc/deap/HeuristicFunction.txt");
+  // std::string LineFromFile;
+  // std::getline(Expr, LineFromFile);
+  GenExprCompiler ExprCompiler("/home/mpvreal/Code/Faculdade/tcc/deap/HeuristicFunction.txt");
+  LLVM_DEBUG(dbgs() << "Função heurística escolhida: " << ExprCompiler.getInput() << '\n');
+  LiveRegPriorityFunction = ExprCompiler.compile();
+
+  LiveRegPriorityFunction->setVariable("area", [&IntervalSpillArea = IntervalSpillArea]() { 
+    return IntervalSpillArea; 
+  });
+  LiveRegPriorityFunction->setVariable("degree", [&IntervalDeg = IntervalDeg]() { 
+    return IntervalDeg; 
+  });
+  LiveRegPriorityFunction->setVariable("cost", [&IntervalCost = IntervalCost]() { 
+    return IntervalCost; 
+  });
 }
 
 // Visit all the live registers. If they are already assigned to a physical
@@ -189,4 +208,49 @@ void RegAllocBase::enqueue(const LiveInterval *LI) {
     LLVM_DEBUG(dbgs() << "Not enqueueing " << printReg(Reg, TRI)
                       << " in skipped register class\n");
   }
+}
+
+double RegAllocBase::calcSpillArea(const LiveInterval *LI, 
+                                   const MachineRegisterInfo &MRI,
+                                   const MachineLoopInfo *MLI) {
+  double SpillArea = 0.0;
+  
+  for (auto I = MRI.reg_instr_nodbg_begin(LI->reg()), E = MRI.reg_instr_nodbg_end(); I != E;) {
+    MachineInstr *MI = &*(I++);
+    SlotIndex MIIndex = LIS->getInstructionIndex(*MI);
+
+    if (MI->isInlineAsm())
+      continue;
+
+    unsigned ExponentResult = 1; // Resultado da expressão 5^Depth(LI)
+    MachineLoop* MILoop = MLI->getLoopFor(MI->getParent());
+    unsigned Depth = MILoop != nullptr ? MILoop->getLoopDepth() : 0; // Depth(LI)
+
+    while (Depth > 0) {
+      ExponentResult *= 5;
+      Depth--;
+    }
+
+    unsigned LiveAtLI = 0;
+
+    for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
+      Register Reg = Register::index2VirtReg(i);
+
+      LiveAtLI += (unsigned) LIS->getInterval(Reg).liveAt(MIIndex);
+    }
+
+    SpillArea += ExponentResult * LiveAtLI;
+  }
+
+  return SpillArea;
+}
+
+unsigned RegAllocBase::calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI) {
+  unsigned Degree = 0;
+
+  for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
+    Degree += (unsigned) LI->overlaps(LIS->getInterval(Register::index2VirtReg(i)));
+  }
+
+  return Degree;
 }
