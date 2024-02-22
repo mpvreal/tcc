@@ -4,13 +4,8 @@ BUILD_LLVM=`pwd`/build
 INSTALL_LLVM=`pwd`/install
 LLVM_SRC=`pwd`/llvm-project
 
-#rm -rf $BUILD_LLVM
-#rm -rf $INSTALL_LLVM
-
 mkdir -p $BUILD_LLVM
 mkdir -p $INSTALL_LLVM
-
-#cd $BUILD_LLVM
 
 cmake -G Ninja \
 	  -S $LLVM_SRC/llvm \
@@ -26,6 +21,6 @@ cmake -G Ninja \
 	  -DLLVM_PARALLEL_COMPILE_JOBS=4 \
 	  -DLLVM_PARALLEL_LINK_JOBS=1 \
 	  -DLLVM_TARGETS_TO_BUILD="X86;AArch64;ARM" \
-	  -DLLVM_LIT_ARGS=-v
+	  -LLVM_ENABLE_ASSERTIONS=OFF
 	  
 ninja -C $BUILD_LLVM llc
