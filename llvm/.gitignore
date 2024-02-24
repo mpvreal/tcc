@@ -9,3 +9,5 @@ llvm-debug-install
 *.txt
 CMakeFiles
 benchmarks
+# llvm-project
+# !llvm-project/llvm/lib/CodeGen
