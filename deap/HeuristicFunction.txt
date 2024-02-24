@@ -1,0 +1,1 @@
+div(cost,mul(area,degree))

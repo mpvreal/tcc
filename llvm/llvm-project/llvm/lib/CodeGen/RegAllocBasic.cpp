@@ -24,10 +24,12 @@
 #include "llvm/CodeGen/MachineBlockFrequencyInfo.h"
 #include "llvm/CodeGen/MachineFunctionPass.h"
 #include "llvm/CodeGen/MachineLoopInfo.h"
+#include "llvm/CodeGen/MachineFrameInfo.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/CodeGen/RegAllocRegistry.h"
 #include "llvm/CodeGen/Spiller.h"
 #include "llvm/CodeGen/TargetRegisterInfo.h"
+#include "llvm/CodeGen/TargetInstrInfo.h"
 #include "llvm/CodeGen/VirtRegMap.h"
 #include "llvm/Pass.h"
 #include "llvm/Support/Debug.h"
@@ -65,7 +67,48 @@ class RABasic : public MachineFunctionPass,
                                      std::less<std::pair<double, unsigned>>>;
   // using PQueue = std::priority_queue<const LiveInterval *, std::vector<const LiveInterval *>,
   //                                    CompSpillWeight>;
+  struct RABasicStats {
+    unsigned Reloads = 0;
+    unsigned FoldedReloads = 0;
+    unsigned ZeroCostFoldedReloads = 0;
+    unsigned Spills = 0;
+    unsigned FoldedSpills = 0;
+    unsigned Copies = 0;
+    float ReloadsCost = 0.0f;
+    float FoldedReloadsCost = 0.0f;
+    float SpillsCost = 0.0f;
+    float FoldedSpillsCost = 0.0f;
+    float CopiesCost = 0.0f;
+
+    bool isEmpty() {
+      return !(Reloads || FoldedReloads || Spills || FoldedSpills ||
+               ZeroCostFoldedReloads || Copies);
+    }
+
+    void add(RABasicStats other) {
+      Reloads += other.Reloads;
+      FoldedReloads += other.FoldedReloads;
+      ZeroCostFoldedReloads += other.ZeroCostFoldedReloads;
+      Spills += other.Spills;
+      FoldedSpills += other.FoldedSpills;
+      Copies += other.Copies;
+      ReloadsCost += other.ReloadsCost;
+      FoldedReloadsCost += other.FoldedReloadsCost;
+      SpillsCost += other.SpillsCost;
+      FoldedSpillsCost += other.FoldedSpillsCost;
+      CopiesCost += other.CopiesCost;
+    }
+
+    // void report(MachineOptimizationRemarkMissed &R);
+  };
+
+  RABasicStats reportStats(MachineLoop *L, MachineLoopInfo* Loops);
+
+  RABasicStats computeStats(MachineBasicBlock &MBB);
+
   MachineFunction *MF;
+  MachineBlockFrequencyInfo *MBFI;
+  MachineLoopInfo *MLI;
 
   // state
   std::unique_ptr<Spiller> SpillerInstance;
@@ -74,6 +117,8 @@ class RABasic : public MachineFunctionPass,
   // Scratch space.  Allocated here to avoid repeated malloc calls in
   // selectOrSplit().
   BitVector UsableRegs;
+
+  void reportStats();
 
   bool LRE_CanEraseVirtReg(Register) override;
   void LRE_WillShrinkVirtReg(Register) override;
@@ -100,14 +145,14 @@ public:
     2. INSTANCIAR VARIÁVEIS COM CAPTURANDO AS ESTATÍSTICAS EM UM LAMBDA
     3. AVALIAR A EXPRESSÃO
     */
-    IntervalSpillArea = calcSpillArea(LI, MRI, &getAnalysis<MachineLoopInfo>());
+    IntervalSpillArea = calcSpillArea(LI, MRI, MLI);
     IntervalDeg = calcIntervalDeg(LI, MRI);
     IntervalCost = LI->weight();
     
     double Priority = LiveRegPriorityFunction->evaluate();
 
     LLVM_DEBUG(dbgs() << "Registrador: " << printReg(Reg, TRI) 
-        << " com prioridade " << Priority << "\n");
+        << " com prioridade " << Priority << " / Original " << LI->weight() << "\n");
 
     Queue.push(std::make_pair(Priority, ~Reg));
   }
@@ -331,6 +376,138 @@ MCRegister RABasic::selectOrSplit(const LiveInterval &VirtReg,
   return 0;
 }
 
+RABasic::RABasicStats RABasic::computeStats(MachineBasicBlock &MBB) {
+  RABasicStats Stats;
+  const MachineFrameInfo &MFI = MF->getFrameInfo();
+  const TargetInstrInfo *TII = MF->getSubtarget().getInstrInfo();
+  int FI;
+
+  auto isSpillSlotAccess = [&MFI](const MachineMemOperand *A) {
+    return MFI.isSpillSlotObjectIndex(cast<FixedStackPseudoSourceValue>(
+        A->getPseudoValue())->getFrameIndex());
+  };
+  auto isPatchpointInstr = [](const MachineInstr &MI) {
+    return MI.getOpcode() == TargetOpcode::PATCHPOINT ||
+           MI.getOpcode() == TargetOpcode::STACKMAP ||
+           MI.getOpcode() == TargetOpcode::STATEPOINT;
+  };
+
+  for (MachineInstr &MI : MBB) {
+    if (MI.isCopy()) {
+      const MachineOperand &Dest = MI.getOperand(0);
+      const MachineOperand &Src = MI.getOperand(1);
+      Register SrcReg = Src.getReg();
+      Register DestReg = Dest.getReg();
+      // Only count `COPY`s with a virtual register as source or destination.
+      if (SrcReg.isVirtual() || DestReg.isVirtual()) {
+        if (SrcReg.isVirtual()) {
+          SrcReg = VRM->getPhys(SrcReg);
+          if (Src.getSubReg())
+            SrcReg = TRI->getSubReg(SrcReg, Src.getSubReg());
+        }
+        if (DestReg.isVirtual()) {
+          DestReg = VRM->getPhys(DestReg);
+          if (Dest.getSubReg())
+            DestReg = TRI->getSubReg(DestReg, Dest.getSubReg());
+        }
+        if (SrcReg != DestReg)
+          ++Stats.Copies;
+      }
+      continue;
+    }
+
+    SmallVector<const MachineMemOperand *, 2> Accesses;
+    if (TII->isLoadFromStackSlot(MI, FI) && MFI.isSpillSlotObjectIndex(FI)) {
+      ++Stats.Reloads;
+      continue;
+    }
+    if (TII->isStoreToStackSlot(MI, FI) && MFI.isSpillSlotObjectIndex(FI)) {
+      ++Stats.Spills;
+      continue;
+    }
+    if (TII->hasLoadFromStackSlot(MI, Accesses) &&
+        llvm::any_of(Accesses, isSpillSlotAccess)) {
+      if (!isPatchpointInstr(MI)) {
+        Stats.FoldedReloads += Accesses.size();
+        continue;
+      }
+      // For statepoint there may be folded and zero cost folded stack reloads.
+      std::pair<unsigned, unsigned> NonZeroCostRange =
+          TII->getPatchpointUnfoldableRange(MI);
+      SmallSet<unsigned, 16> FoldedReloads;
+      SmallSet<unsigned, 16> ZeroCostFoldedReloads;
+      for (unsigned Idx = 0, E = MI.getNumOperands(); Idx < E; ++Idx) {
+        MachineOperand &MO = MI.getOperand(Idx);
+        if (!MO.isFI() || !MFI.isSpillSlotObjectIndex(MO.getIndex()))
+          continue;
+        if (Idx >= NonZeroCostRange.first && Idx < NonZeroCostRange.second)
+          FoldedReloads.insert(MO.getIndex());
+        else
+          ZeroCostFoldedReloads.insert(MO.getIndex());
+      }
+      // If stack slot is used in folded reload it is not zero cost then.
+      for (unsigned Slot : FoldedReloads)
+        ZeroCostFoldedReloads.erase(Slot);
+      Stats.FoldedReloads += FoldedReloads.size();
+      Stats.ZeroCostFoldedReloads += ZeroCostFoldedReloads.size();
+      continue;
+    }
+    Accesses.clear();
+    if (TII->hasStoreToStackSlot(MI, Accesses) &&
+        llvm::any_of(Accesses, isSpillSlotAccess)) {
+      Stats.FoldedSpills += Accesses.size();
+    }
+  }
+  // Set cost of collected statistic by multiplication to relative frequency of
+  // this basic block.
+  float RelFreq = MBFI->getBlockFreqRelativeToEntryBlock(&MBB);
+  Stats.ReloadsCost = RelFreq * Stats.Reloads;
+  Stats.FoldedReloadsCost = RelFreq * Stats.FoldedReloads;
+  Stats.SpillsCost = RelFreq * Stats.Spills;
+  Stats.FoldedSpillsCost = RelFreq * Stats.FoldedSpills;
+  Stats.CopiesCost = RelFreq * Stats.Copies;
+  return Stats;
+}
+
+RABasic::RABasicStats RABasic::reportStats(MachineLoop *L, MachineLoopInfo* Loops) {
+  RABasicStats Stats;
+
+  // Sum up the spill and reloads in subloops.
+  for (MachineLoop *SubLoop : *L)
+    Stats.add(reportStats(SubLoop, Loops));
+
+  for (MachineBasicBlock *MBB : L->getBlocks())
+    // Handle blocks that were not included in subloops.
+    if (Loops->getLoopFor(MBB) == L)
+      Stats.add(computeStats(*MBB));
+
+  return Stats;
+}
+
+void RABasic::reportStats() {
+  RABasicStats Stats;
+
+  for (MachineLoop *L : *MLI)
+    Stats.add(reportStats(L, MLI));
+
+  // Process non-loop blocks.
+  for (MachineBasicBlock &MBB : *MF)
+    if (!MLI->getLoopFor(&MBB))
+      Stats.add(computeStats(MBB));
+
+  // if (!Stats.isEmpty()) {
+  LLVM_DEBUG(dbgs() 
+      << "********** ESTATÍSTICAS: Alocador Basic **********\n"
+      << "********** Função: " << MF->getName() << '\n'
+      << "Reloads, FoldedReloads, ZeroCostFoldedReloads, Spills, FoldedSpills, Copies, "
+      << "ReloadsCost, FoldedReloadsCost, SpillsCost, FoldedSpillsCost, CopiesCost\n"
+      << Stats.Reloads << ", " << Stats.FoldedReloads << ", " << Stats.ZeroCostFoldedReloads 
+      << ", " << Stats.Spills << ", " << Stats.FoldedSpills << ", " << Stats.Copies << ", "
+      << Stats.ReloadsCost << ", " << Stats.FoldedReloadsCost << ", " << Stats.SpillsCost
+      << ", " << Stats.FoldedSpillsCost << ", " << Stats.CopiesCost << "\n");
+  // }
+}
+
 bool RABasic::runOnMachineFunction(MachineFunction &mf) {
   LLVM_DEBUG(dbgs() << "********** BASIC REGISTER ALLOCATION (modificado))) **********\n"
                     << "********** Function: " << mf.getName() << '\n');
@@ -340,14 +517,18 @@ bool RABasic::runOnMachineFunction(MachineFunction &mf) {
                      getAnalysis<LiveIntervals>(),
                      getAnalysis<LiveRegMatrix>());
 
+  MBFI = &getAnalysis<MachineBlockFrequencyInfo>();
+  MLI = &getAnalysis<MachineLoopInfo>();
+
   VirtRegAuxInfo VRAI(*MF, *LIS, *VRM, getAnalysis<MachineLoopInfo>(),
-                      getAnalysis<MachineBlockFrequencyInfo>());
+                      *MBFI);
   VRAI.calculateSpillWeightsAndHints();
 
   SpillerInstance.reset(createInlineSpiller(*this, *MF, *VRM, VRAI));
 
   allocatePhysRegs();
   postOptimization();
+  reportStats();
 
   // Diagnostic output before rewriting
   LLVM_DEBUG(dbgs() << "Post alloc VirtRegMap:\n" << *VRM << "\n");

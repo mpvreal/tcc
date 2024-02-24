@@ -2574,8 +2574,8 @@ RAGreedy::RAGreedyStats RAGreedy::reportStats(MachineLoop *L) {
 }
 
 void RAGreedy::reportStats() {
-  if (!ORE->allowExtraAnalysis(DEBUG_TYPE))
-    return;
+  // if (!ORE->allowExtraAnalysis(DEBUG_TYPE))
+  //   return;
   RAGreedyStats Stats;
   for (MachineLoop *L : *Loops)
     Stats.add(reportStats(L));
@@ -2583,20 +2583,31 @@ void RAGreedy::reportStats() {
   for (MachineBasicBlock &MBB : *MF)
     if (!Loops->getLoopFor(&MBB))
       Stats.add(computeStats(MBB));
-  if (!Stats.isEmpty()) {
-    using namespace ore;
 
-    ORE->emit([&]() {
-      DebugLoc Loc;
-      if (auto *SP = MF->getFunction().getSubprogram())
-        Loc = DILocation::get(SP->getContext(), SP->getLine(), 1, SP);
-      MachineOptimizationRemarkMissed R(DEBUG_TYPE, "SpillReloadCopies", Loc,
-                                        &MF->front());
-      Stats.report(R);
-      R << "generated in function";
-      return R;
-    });
-  }
+  // if (!Stats.isEmpty()) {
+  //   using namespace ore;
+
+  //   ORE->emit([&]() {
+  //     DebugLoc Loc;
+  //     if (auto *SP = MF->getFunction().getSubprogram())
+  //       Loc = DILocation::get(SP->getContext(), SP->getLine(), 1, SP);
+  //     MachineOptimizationRemarkMissed R(DEBUG_TYPE, "SpillReloadCopies", Loc,
+  //                                       &MF->front());
+  //     Stats.report(R);
+  //     R << "generated in function";
+  //     return R;
+  //   });
+  // }
+
+  LLVM_DEBUG(dbgs() 
+      << "********** ESTATÍSTICAS: Alocador Greedy **********\n"
+      << "********** Função: " << MF->getName() << '\n'
+      << "Reloads, FoldedReloads, ZeroCostFoldedReloads, Spills, FoldedSpills, Copies, "
+      << "ReloadsCost, FoldedReloadsCost, SpillsCost, FoldedSpillsCost, CopiesCost\n"
+      << Stats.Reloads << ", " << Stats.FoldedReloads << ", " << Stats.ZeroCostFoldedReloads 
+      << ", " << Stats.Spills << ", " << Stats.FoldedSpills << ", " << Stats.Copies << ", "
+      << Stats.ReloadsCost << ", " << Stats.FoldedReloadsCost << ", " << Stats.SpillsCost
+      << ", " << Stats.FoldedSpillsCost << ", " << Stats.CopiesCost << "\n");
 }
 
 bool RAGreedy::hasVirtRegAlloc() {
