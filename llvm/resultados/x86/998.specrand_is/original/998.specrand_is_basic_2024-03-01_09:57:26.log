@@ -1,0 +1,15 @@
+Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc -march=x86 --regalloc=basic -o -
+Heurística: original
+~&SPILL_STATS,0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 158.375
+~&SPILL_STATS,0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 158.375
+~&SPILL_STATS,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+~&SPILL_STATS,5, 1, 0, 0, 2, 19, 40.6129, 8.22581, 0, 8.22581, 170.484
+~&SPILL_STATS,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+~&SPILL_STATS,0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 158.375
+~&SPILL_STATS,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+~&SPILL_STATS,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+~&SPILL_STATS,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+~&SPILL_STATS,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+~&SPILL_STATS,1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0
+~&SPILL_STATS,0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1
+~&SPILL_STATS,0, 2, 0, 2, 6, 4, 0, 27.8824, 1.61765, 63.0882, 62.2353

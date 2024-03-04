@@ -34,6 +34,7 @@
 #include "llvm/Pass.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/Support/raw_ostream.h"
+#include <iostream>
 #include <queue>
 #include <utility>
 #include <fstream>
@@ -62,9 +63,7 @@ namespace {
 class RABasic : public MachineFunctionPass,
                 public RegAllocBase,
                 private LiveRangeEdit::Delegate {
-  using PQueue = std::priority_queue<std::pair<double, unsigned>, 
-                                     std::vector<std::pair<double, unsigned>>,
-                                     std::less<std::pair<double, unsigned>>>;
+  using PQueue = std::priority_queue<std::pair<double, unsigned>>;
   // using PQueue = std::priority_queue<const LiveInterval *, std::vector<const LiveInterval *>,
   //                                    CompSpillWeight>;
   struct RABasicStats {
@@ -148,6 +147,7 @@ public:
     IntervalSpillArea = calcSpillArea(LI, MRI, MLI);
     IntervalDeg = calcIntervalDeg(LI, MRI);
     IntervalCost = LI->weight();
+    Original = LI->weight();
     
     double Priority = LiveRegPriorityFunction->evaluate();
 
@@ -501,11 +501,17 @@ void RABasic::reportStats() {
       << "********** Função: " << MF->getName() << '\n'
       << "Reloads, FoldedReloads, ZeroCostFoldedReloads, Spills, FoldedSpills, Copies, "
       << "ReloadsCost, FoldedReloadsCost, SpillsCost, FoldedSpillsCost, CopiesCost\n"
+      << "@, "
       << Stats.Reloads << ", " << Stats.FoldedReloads << ", " << Stats.ZeroCostFoldedReloads 
       << ", " << Stats.Spills << ", " << Stats.FoldedSpills << ", " << Stats.Copies << ", "
       << Stats.ReloadsCost << ", " << Stats.FoldedReloadsCost << ", " << Stats.SpillsCost
       << ", " << Stats.FoldedSpillsCost << ", " << Stats.CopiesCost << "\n");
   // }
+  std::cerr << "~&SPILL_STATS,"
+      << Stats.Reloads << ", " << Stats.FoldedReloads << ", " << Stats.ZeroCostFoldedReloads 
+      << ", " << Stats.Spills << ", " << Stats.FoldedSpills << ", " << Stats.Copies << ", "
+      << Stats.ReloadsCost << ", " << Stats.FoldedReloadsCost << ", " << Stats.SpillsCost
+      << ", " << Stats.FoldedSpillsCost << ", " << Stats.CopiesCost << '\n';
 }
 
 bool RABasic::runOnMachineFunction(MachineFunction &mf) {

@@ -82,6 +82,9 @@ void RegAllocBase::init(VirtRegMap &vrm, LiveIntervals &lis,
   LiveRegPriorityFunction->setVariable("cost", [&IntervalCost = IntervalCost]() { 
     return IntervalCost; 
   });
+  LiveRegPriorityFunction->setVariable("original", [&Original = Original]() { 
+    return Original; 
+  });
 }
 
 // Visit all the live registers. If they are already assigned to a physical
@@ -249,7 +252,9 @@ unsigned RegAllocBase::calcIntervalDeg(const LiveInterval* LI, const MachineRegi
   unsigned Degree = 0;
 
   for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
-    Degree += (unsigned) LI->overlaps(LIS->getInterval(Register::index2VirtReg(i)));
+    Degree += (unsigned) (!LI->empty() 
+        ? LI->overlaps(LIS->getInterval(Register::index2VirtReg(i)))
+        : false);
   }
 
   return Degree;

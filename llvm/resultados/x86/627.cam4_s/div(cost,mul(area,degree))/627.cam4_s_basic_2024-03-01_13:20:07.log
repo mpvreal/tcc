@@ -1,0 +1,7 @@
+Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc -march=x86 --regalloc=basic -o -
+Heurística: div(cost,mul(area,degree))
+~&SPILL_STATS,0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+~&SPILL_STATS,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+~&SPILL_STATS,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+~&SPILL_STATS,0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+~&SPILL_STATS,0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3

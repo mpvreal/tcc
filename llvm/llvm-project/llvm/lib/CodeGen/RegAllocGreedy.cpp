@@ -71,6 +71,7 @@
 #include "llvm/Support/Timer.h"
 #include "llvm/Support/raw_ostream.h"
 #include <algorithm>
+#include <iostream>
 #include <cassert>
 #include <cstdint>
 #include <utility>
@@ -292,15 +293,17 @@ void RAGreedy::enqueue(PQueue &CurQueue, const LiveInterval *LI) {
     Stage = RS_Assign;
     ExtraInfo->setStage(Reg, Stage);
   }
-
   /*
   1. CALCULAR ESTATÍSTICAS SOBRE O LIVEINTERVAL LI
   2. INSTANCIAR VARIÁVEIS COM CAPTURANDO AS ESTATÍSTICAS EM UM LAMBDA
   3. AVALIAR A EXPRESSÃO
   */
+
   IntervalSpillArea = calcSpillArea(LI, MRI, &getAnalysis<MachineLoopInfo>());
   IntervalDeg = calcIntervalDeg(LI, MRI);
   IntervalCost = LI->weight();
+  Original = PriorityAdvisor->getPriority(*LI);
+
   double Ret = LiveRegPriorityFunction->evaluate();
 
   LLVM_DEBUG(dbgs() << "Registrador: " << printReg(Reg, TRI) 
@@ -2604,10 +2607,17 @@ void RAGreedy::reportStats() {
       << "********** Função: " << MF->getName() << '\n'
       << "Reloads, FoldedReloads, ZeroCostFoldedReloads, Spills, FoldedSpills, Copies, "
       << "ReloadsCost, FoldedReloadsCost, SpillsCost, FoldedSpillsCost, CopiesCost\n"
+      << "@, "
       << Stats.Reloads << ", " << Stats.FoldedReloads << ", " << Stats.ZeroCostFoldedReloads 
       << ", " << Stats.Spills << ", " << Stats.FoldedSpills << ", " << Stats.Copies << ", "
       << Stats.ReloadsCost << ", " << Stats.FoldedReloadsCost << ", " << Stats.SpillsCost
       << ", " << Stats.FoldedSpillsCost << ", " << Stats.CopiesCost << "\n");
+
+  std::cerr << "~&SPILL_STATS,"
+      << Stats.Reloads << ", " << Stats.FoldedReloads << ", " << Stats.ZeroCostFoldedReloads 
+      << ", " << Stats.Spills << ", " << Stats.FoldedSpills << ", " << Stats.Copies << ", "
+      << Stats.ReloadsCost << ", " << Stats.FoldedReloadsCost << ", " << Stats.SpillsCost
+      << ", " << Stats.FoldedSpillsCost << ", " << Stats.CopiesCost << '\n';
 }
 
 bool RAGreedy::hasVirtRegAlloc() {
@@ -2680,16 +2690,6 @@ bool RAGreedy::runOnMachineFunction(MachineFunction &mf) {
   // GenExprCompiler ExprCompiler;
   // LiveRegPriorityFunction 
   //     = ExprCompiler.compile("/home/mpvreal/Code/Faculdade/tcc/deap/HeuristicFunction.txt");
-
-  LiveRegPriorityFunction->setVariable("area", [&IntervalSpillArea = IntervalSpillArea]() { 
-    return IntervalSpillArea; 
-  });
-  LiveRegPriorityFunction->setVariable("degree", [&IntervalDeg = IntervalDeg]() { 
-    return IntervalDeg; 
-  });
-  LiveRegPriorityFunction->setVariable("cost", [&IntervalCost = IntervalCost]() { 
-    return IntervalCost; 
-  });
 
   LLVM_DEBUG(LIS->dump());
 
