@@ -1,1 +1,1 @@
-pow(6)
+div(cost, pow(degree, 2.0))

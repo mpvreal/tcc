@@ -1,0 +1,6 @@
+div(cost,pow(degree,2.0))
+div(cost,pow(degree,2.0))
+div(cost,pow(degree,2.0))
+div(cost,pow(degree,2.0))
+div(cost,pow(degree,2.0))
+div(cost,pow(degree,2.0))
