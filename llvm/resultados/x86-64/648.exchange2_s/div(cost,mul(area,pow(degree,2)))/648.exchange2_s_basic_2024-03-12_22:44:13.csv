@@ -1,0 +1,19 @@
+"Função heurística: div(cost,mul(area,pow(degree,2)))",Reloads,FoldedReloads,ZeroCostFoldedReloads,Spills,FoldedSpills,Copies,ReloadsCost,FoldedReloadsCost,SpillsCost,FoldedSpillsCost,CopiesCost
+function@_QMlogicPnew_solver,905,566,0,304,127,226,4.36653e+06,1.4168e+06,576224,105554,1.08189e+06
+function@_QMlogicFnew_solverPupdate,52,69,0,32,11,44,62.4368,83.931,27.4943,9.21839,348.425
+function@_QMlogicFnew_solverPx_wing,497,342,0,162,113,86,16301,21345.6,1071.07,3797.47,1566.33
+function@_QMlogicFnew_solverPspecific,868,287,0,356,207,184,1.09347e+07,1.19595e+06,714396,220523,2.65054e+06
+function@_QMlogicFnew_solverPnaked_pairs,585,446,0,171,94,130,159278,455964,18066.6,27899.1,23259.7
+function@_QMlogicFnew_solverPhidden_pairs,595,443,0,199,83,70,3.06155e+06,1.30026e+06,330522,129303,354104
+function@_QMlogicFnew_solverPnaked_triplets,948,669,0,248,141,180,3.07177e+06,7.30744e+06,281108,267530,370178
+function@_QMlogicFnew_solverPhidden_triplets,1380,826,0,260,139,216,3.39877e+06,4.88018e+06,347001,347256,208419
+function@_QMbrute_forcePbrute,464,63,0,81,53,90,593.137,132.756,128.423,82.4305,358.861
+function@_QMbrute_forcePrearrange,794,17,0,52,53,67,9445.02,55.2979,396.043,66.0213,473.17
+function@_QMbrute_forcePdigits_2,444,149,0,124,21,254,1239.87,513.725,363.52,104.117,547.942
+function@_QMbrute_forcePcovered,134,12,0,46,15,45,17798.3,971.41,2051.69,50.1066,7562.43
+function@_QMbrute_forcePreflected,45,51,0,31,12,27,28183.7,42608.7,3369.55,188.141,20580.1
+function@_QQmain,172,226,0,245,107,126,9.09319e+13,5.99035e+13,5.0571e+13,4.33471e+12,2.65523e+13
+function@_QFPeliminate,5,1,0,4,1,6,65.0833,5.3125,9.16667,5.3125,236.979
+function@_QFPknt_val,0,0,0,0,0,3,0,0,0,0,64.75
+function@_QFPone_nine,0,0,0,0,0,8,0,0,0,0,8
+function@_QFPread_raw_data,1,0,0,1,0,27,1,0,1,0,105.5

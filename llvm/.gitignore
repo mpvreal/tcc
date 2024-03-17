@@ -4,6 +4,7 @@ build_aaa
 build
 build-debug
 compiler-rt
+flang
 install
 llvm-debug-install
 *.txt

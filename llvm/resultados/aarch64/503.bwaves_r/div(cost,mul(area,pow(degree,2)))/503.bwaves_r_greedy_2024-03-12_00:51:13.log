@@ -1,0 +1,10 @@
+Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc --march=aarch64 --regalloc=greedy -o -
+Heurística: div(cost,mul(area,pow(degree,2)))
+function@flux_,400,0,0,150,0,97,258873,0,10144.1,0,45457.7
+function@_QQmain,0,0,0,0,0,146,0,0,0,0,142
+function@jacobian_,35,0,0,34,0,9,146373,0,119562,0,35625.9
+function@fill1_,0,0,0,0,0,9,0,0,0,0,988.7
+function@shell_,298,1,0,204,0,135,3.46711e+06,1.16176,2.11353e+06,0,6.64225e+06
+function@bi_cgstab_block_,173,0,0,58,0,154,146851,0,5378.88,0,1.13178e+06
+function@mat_times_vec_,74,0,0,66,0,10,69487.9,0,15083.8,0,424532
+function@fill2_,0,0,0,0,0,5,0,0,0,0,54.5

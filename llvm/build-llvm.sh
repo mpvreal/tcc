@@ -1,27 +1,24 @@
 #!/bin/bash
 
-BUILD_LLVM=`pwd`/build
-INSTALL_LLVM=`pwd`/install
-LLVM_SRC=`pwd`/llvm-project
+build_llvm=`pwd`/build
+llvm_root=`pwd`/src
 
-mkdir -p $BUILD_LLVM
-mkdir -p $INSTALL_LLVM
+mkdir -p $build_llvm
+cd $build_llvm
 
 cmake -G Ninja \
-	    -S $LLVM_SRC/llvm \
-	    -B $BUILD_LLVM \
-	    -DCMAKE_INSTALL_PREFIX=$INSTALL_LLVM \
-	    -DCMAKE_BUILD_TYPE=Release \
-	    -DLLVM_OPTIMIZED_TABLEGEN=ON \
+	    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
 	    -DCMAKE_CXX_STANDARD=17 \
 	    -DCMAKE_C_COMPILER=$(which clang) \
 	    -DCMAKE_CXX_COMPILER=$(which clang++) \
-	    -DLLVM_ENABLE_LLD=ON \
-	    -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/usr/lib" \
 	    -DLLVM_PARALLEL_COMPILE_JOBS=4 \
 	    -DLLVM_PARALLEL_LINK_JOBS=1 \
+	    -DLLVM_ENABLE_LLD=ON \
+	    -DLLVM_USE_SPLIT_DWARF=ON \
+	    -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/usr/lib" \
+	    -DLLVM_DIR=/usr/lib/cmake/llvm \
 	    -DLLVM_TARGETS_TO_BUILD="X86;AArch64;ARM" \
-	    -DLLVM_ENABLE_PROJECTS="clang;flang"
-#	    -DLLVM_ENABLE_ASSERTIONS=OFF
+	    $llvm_root/llvm
 	  
-ninja -C $BUILD_LLVM llc
+ninja llc
+#ninja install

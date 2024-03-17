@@ -1,0 +1,9 @@
+"Função heurística: original",Reloads,FoldedReloads,ZeroCostFoldedReloads,Spills,FoldedSpills,Copies,ReloadsCost,FoldedReloadsCost,SpillsCost,FoldedSpillsCost,CopiesCost
+function@flux_,2761,227,0,286,644,54,3.61657e+06,66425.8,236530,570204,14940.5
+function@_QQmain,1,5,0,3,1,27,1,5,3,0.47619,25
+function@jacobian_,320,22,0,84,59,10,2.13322e+06,51078.2,240099,256212,8963.68
+function@fill1_,35,29,0,29,19,5,23379.7,11218.8,6511.25,5298.35,1076.05
+function@shell_,1146,353,0,336,411,194,2.16666e+10,3.28686e+09,2.27491e+09,7.53994e+09,8.44197e+09
+function@bi_cgstab_block_,470,181,0,167,199,45,1.77193e+08,2.04947e+07,1.04014e+07,2.41361e+07,1.70792e+07
+function@mat_times_vec_,65,30,0,40,29,10,7.8415e+07,1.61897e+07,1.36516e+07,1.00574e+07,3.21602e+06
+function@fill2_,74,17,0,26,16,5,19581,1207.65,2574.05,1230.75,667.1

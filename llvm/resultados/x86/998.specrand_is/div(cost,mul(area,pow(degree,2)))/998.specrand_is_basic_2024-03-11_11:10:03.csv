@@ -1,0 +1,14 @@
+"Função heurística: div(cost,mul(area,pow(degree,2)))",Reloads,FoldedReloads,ZeroCostFoldedReloads,Spills,FoldedSpills,Copies,ReloadsCost,FoldedReloadsCost,SpillsCost,FoldedSpillsCost,CopiesCost
+function@spec_srand,0,0,0,0,0,6,0,0,0,0,190.25
+function@spec_init_genrand,0,0,0,0,0,6,0,0,0,0,190.25
+function@spec_rand,0,0,0,0,0,0,0,0,0,0,0
+function@spec_genrand_int32,0,0,0,0,0,21,0,0,0,0,179.71
+function@spec_lrand48,0,0,0,0,0,0,0,0,0,0,0
+function@spec_init_by_array,0,0,0,0,0,5,0,0,0,0,158.375
+function@spec_genrand_int31,0,0,0,0,0,0,0,0,0,0,0
+function@spec_genrand_real1,0,0,0,0,0,0,0,0,0,0,0
+function@spec_genrand_real2,0,0,0,0,0,0,0,0,0,0,0
+function@spec_genrand_real3,0,0,0,0,0,0,0,0,0,0,0
+function@spec_genrand_res53,1,0,0,1,0,0,1,0,1,0,0
+function@main,0,0,0,0,0,2,0,0,0,0,1
+function@run_sequence,0,0,0,1,1,4,0,0,1,14.2941,62.2353

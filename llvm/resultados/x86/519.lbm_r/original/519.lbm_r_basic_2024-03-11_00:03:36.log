@@ -1,0 +1,20 @@
+Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc --march=x86 --regalloc=basic -o -
+Heurística: original
+function@main,3,0,0,1,0,2,1.66667,0,1,0,2
+function@MAIN_parseCommandLine,0,0,0,0,0,1,0,0,0,0,0.499999
+function@MAIN_printInfo,0,0,0,0,0,0,0,0,0,0,0
+function@MAIN_initialize,0,0,0,0,0,0,0,0,0,0,0
+function@MAIN_finalize,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_allocateGrid,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_freeGrid,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_initializeGrid,0,0,0,0,0,2,0,0,0,0,63.75
+function@LBM_swapGrids,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_loadObstacleFile,4,3,0,1,8,3,2111.5,2079.62,31.875,2177.25,33792.8
+function@LBM_initializeSpecialCellsForLDC,6,11,0,1,8,15,180.625,2196.38,31.875,460.125,67355.5
+function@LBM_initializeSpecialCellsForChannel,2,2,0,1,4,9,63.75,1055.75,31.875,65.75,70313.9
+function@LBM_performStreamCollideBGK,9,39,0,15,0,8,118.875,475.125,238.125,0,191
+function@LBM_performStreamCollideTRT,59,113,0,65,0,8,928.625,1721.88,1047.88,0,191
+function@LBM_handleInOutFlow,20,47,0,25,4,5,637.5,1498.12,796.875,65.75,159.375
+function@LBM_showGridStatistics,17,30,0,23,2,7,168.625,638.125,477,16.9375,207.562
+function@LBM_storeVelocityField,6,2,0,2,9,2,35904,1056,1056,3202,32769
+function@LBM_compareVelocityField,13,46,0,23,9,2,232513,1.44285e+06,656417,3202,32769

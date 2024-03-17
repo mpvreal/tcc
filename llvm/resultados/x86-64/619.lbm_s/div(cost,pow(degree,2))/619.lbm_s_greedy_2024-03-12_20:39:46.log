@@ -1,0 +1,27 @@
+Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc --march=x86-64 --regalloc=greedy -o -
+Heurística: div(cost,pow(degree,2))
+function@main,0,0,0,0,0,14,0,0,0,0,54.1667
+function@MAIN_parseCommandLine,0,0,0,0,0,3,0,0,0,0,3
+function@MAIN_printInfo,0,0,0,0,0,0,0,0,0,0,0
+function@MAIN_initialize,0,0,0,0,0,1,0,0,0,0,1
+function@MAIN_finalize,0,0,0,0,0,1,0,0,0,0,1
+function@LBM_allocateGrid,0,0,0,0,0,1,0,0,0,0,1
+function@LBM_freeGrid,0,0,0,0,0,1,0,0,0,0,1
+function@LBM_initializeGrid,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_initializeGrid.omp_outlined,0,0,0,0,0,3,0,0,0,0,3
+function@LBM_swapGrids,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_loadObstacleFile,0,0,0,0,0,9,0,0,0,0,33860.5
+function@LBM_initializeSpecialCellsForLDC,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_initializeSpecialCellsForLDC.omp_outlined,0,0,0,0,0,9,0,0,0,0,507.889
+function@LBM_initializeSpecialCellsForChannel,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_initializeSpecialCellsForChannel.omp_outlined,0,0,0,0,0,7,0,0,0,0,392.333
+function@LBM_performStreamCollideBGK,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_performStreamCollideBGK.omp_outlined,2,6,0,6,0,5,8,24,48,0,4.5
+function@LBM_performStreamCollideTRT,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_performStreamCollideTRT.omp_outlined,28,26,0,49,0,10,224,208,392,0,44.5
+function@LBM_handleInOutFlow,0,0,0,0,0,2,0,0,0,0,2
+function@LBM_handleInOutFlow.omp_outlined,0,0,0,0,0,6,0,0,0,0,51
+function@LBM_handleInOutFlow.omp_outlined.2,6,6,0,11,0,3,96,96,176,0,3
+function@LBM_showGridStatistics,21,3,0,15,0,6,148.75,47.8125,252.938,0,19.9375
+function@LBM_storeVelocityField,3,0,0,3,0,12,1088,0,1088,0,114694
+function@LBM_compareVelocityField,22,1,0,23,0,14,623680,32768,656448,0,139270

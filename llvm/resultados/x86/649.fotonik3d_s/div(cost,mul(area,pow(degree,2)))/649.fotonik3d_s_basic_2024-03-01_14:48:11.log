@@ -1,2 +1,0 @@
-Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc -march=x86 --regalloc=basic -o -
-Heurística: div(cost,mul(area,pow(degree,2)))

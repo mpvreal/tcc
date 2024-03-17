@@ -1,0 +1,9 @@
+"Função heurística: div(cost,pow(degree,2))",Reloads,FoldedReloads,ZeroCostFoldedReloads,Spills,FoldedSpills,Copies,ReloadsCost,FoldedReloadsCost,SpillsCost,FoldedSpillsCost,CopiesCost
+function@flux_,1220,504,0,555,171,157,1.13764e+06,522981,390850,20570.1,301694
+function@_QQmain,0,0,0,0,0,134,0,0,0,0,129.619
+function@jacobian_,130,83,0,122,15,21,660393,556828,522695,536.083,119472
+function@fill1_,24,9,0,15,4,8,449.8,293.3,55.55,66.4,808.75
+function@shell_,660,262,0,408,199,95,1.65982e+09,1.46193e+09,1.15894e+08,5.72708e+07,1.16827e+09
+function@bi_cgstab_block_,274,87,0,170,50,74,4.51052e+06,4.46812e+06,5.69493e+06,26313.2,3.59449e+06
+function@mat_times_vec_,132,42,0,87,42,2,6.6098e+07,3.65741e+06,422421,6.9235e+06,5599.83
+function@fill2_,0,0,0,0,0,8,0,0,0,0,38.4

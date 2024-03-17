@@ -1,0 +1,10 @@
+Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc --march=x86-64 --regalloc=basic -o -
+Heurística: original
+function@flux_,1290,553,0,648,118,152,1.24648e+06,492502,397517,18726.2,302577
+function@_QQmain,0,0,0,0,0,134,0,0,0,0,129.619
+function@jacobian_,130,87,0,126,11,21,660393,557310,523178,53.75,119472
+function@fill1_,18,15,0,17,1,8,172,1422,96.05,12.75,407.15
+function@shell_,663,302,0,479,160,95,1.66498e+09,1.46201e+09,1.21119e+08,5.72042e+07,1.16825e+09
+function@bi_cgstab_block_,276,110,0,197,24,61,4.50852e+06,4.35336e+06,5.69571e+06,22486.3,3.23544e+06
+function@mat_times_vec_,132,56,0,101,28,2,6.6098e+07,7.07506e+06,3.84007e+06,3.50585e+06,5599.83
+function@fill2_,0,6,0,1,0,7,0,87.25,0.6,0,37.4

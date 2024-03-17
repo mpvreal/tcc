@@ -1,0 +1,20 @@
+Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc --march=x86-64 --regalloc=greedy -o -
+Heurística: div(cost,pow(degree,2))
+function@_QMlogicPnew_solver,488,297,0,190,18,319,2.17603e+06,770330,188430,1748.86,1.15914e+06
+function@_QMlogicFnew_solverPupdate,44,38,0,28,0,45,31.5287,39.9081,24.7126,0,346.264
+function@_QMlogicFnew_solverPx_wing,335,168,0,121,20,157,10950.2,3396.78,3755.05,437.881,2642.04
+function@_QMlogicFnew_solverPspecific,471,125,0,238,47,277,3.37362e+06,301238,187040,28547.4,3.14942e+06
+function@_QMlogicFnew_solverPnaked_pairs,478,208,0,141,11,184,91283.5,51814.9,17083.3,4757.44,35812.1
+function@_QMlogicFnew_solverPhidden_pairs,413,197,0,139,7,159,1.09794e+06,362625,187160,746.2,915199
+function@_QMlogicFnew_solverPnaked_triplets,765,310,0,203,30,247,1.4657e+06,854727,137201,58416.9,536432
+function@_QMlogicFnew_solverPhidden_triplets,1061,388,0,220,31,319,965244,477889,86422.3,43443.5,318847
+function@_QMbrute_forcePbrute,58,36,0,49,19,108,117.269,49.4047,77.0453,37.2633,327.082
+function@_QMbrute_forcePrearrange,48,9,0,55,0,88,692.638,14.234,549.553,0,1100.19
+function@_QMbrute_forcePdigits_2,287,80,0,87,1,288,606.39,329.561,246.496,1.13352,864.997
+function@_QMbrute_forcePcovered,107,1,0,42,6,58,15551.4,0.872786,331.744,1.85466,12031.2
+function@_QMbrute_forcePreflected,20,43,0,28,5,29,13676.4,40348.7,3455.85,90.2994,20585
+function@_QQmain,97,183,0,239,1,149,5.67447e+13,4.077e+12,5.10678e+13,5.06322e+11,7.79e+13
+function@_QFPeliminate,4,0,0,4,0,6,58.0625,0,14.3333,0,236.979
+function@_QFPknt_val,0,0,0,0,0,3,0,0,0,0,64.75
+function@_QFPone_nine,0,0,0,0,0,8,0,0,0,0,8
+function@_QFPread_raw_data,1,0,0,1,0,27,0.5,0,0.5,0,105.5

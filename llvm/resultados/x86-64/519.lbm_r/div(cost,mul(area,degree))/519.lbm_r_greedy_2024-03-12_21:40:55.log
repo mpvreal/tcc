@@ -1,0 +1,20 @@
+Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc --march=x86-64 --regalloc=greedy -o -
+Heurística: div(cost,mul(area,degree))
+function@main,0,0,0,0,0,14,0,0,0,0,54.1667
+function@MAIN_parseCommandLine,0,0,0,0,0,3,0,0,0,0,3
+function@MAIN_printInfo,0,0,0,0,0,0,0,0,0,0,0
+function@MAIN_initialize,0,0,0,0,0,1,0,0,0,0,1
+function@MAIN_finalize,0,0,0,0,0,1,0,0,0,0,1
+function@LBM_allocateGrid,0,0,0,0,0,1,0,0,0,0,1
+function@LBM_freeGrid,0,0,0,0,0,1,0,0,0,0,1
+function@LBM_initializeGrid,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_swapGrids,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_loadObstacleFile,0,0,0,0,0,9,0,0,0,0,33860.5
+function@LBM_initializeSpecialCellsForLDC,0,0,0,0,0,7,0,0,0,0,3740.12
+function@LBM_initializeSpecialCellsForChannel,0,0,0,0,0,2,0,0,0,0,10954.5
+function@LBM_performStreamCollideBGK,2,4,0,5,0,1,15.75,31.5,79.375,0,31.875
+function@LBM_performStreamCollideTRT,31,25,0,50,0,5,492.125,388.875,793.75,0,79.375
+function@LBM_handleInOutFlow,6,6,0,11,0,7,191.25,191.25,350.625,0,223.125
+function@LBM_showGridStatistics,21,3,0,15,0,6,148.75,47.8125,252.938,0,19.9375
+function@LBM_storeVelocityField,3,0,0,3,0,12,1088,0,1088,0,114694
+function@LBM_compareVelocityField,22,1,0,23,0,14,623680,32768,656448,0,139270

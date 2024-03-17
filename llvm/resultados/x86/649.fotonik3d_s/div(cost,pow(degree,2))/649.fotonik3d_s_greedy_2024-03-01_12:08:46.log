@@ -1,2 +1,0 @@
-Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc -march=x86 --regalloc=greedy -o -
-Heurística: div(cost,pow(degree,2))
