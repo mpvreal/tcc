@@ -104,7 +104,7 @@ std::unique_ptr<GenExprTree> GenExprCompiler::unary(enum ExprToken token, const 
     return std::make_unique<GenExprTree>(GenExprTree::OPERATION, 
                                           id, 
                                           std::move(left), 
-                                          std::move(binaryOrTernary(getCurrentToken())));
+                                          binaryOrTernary(getCurrentToken()));
   }
 
   return std::make_unique<GenExprTree>(GenExprTree::VARIABLE, id, nullptr, nullptr);
@@ -124,10 +124,13 @@ std::unique_ptr<GenExprTree> GenExprCompiler::binaryOrTernary(enum ExprToken tok
     return right;
   }
 
+  auto rightmost = expression(getNextToken());
+  getNextToken();
+
   return std::make_unique<GenExprTree>(GenExprTree::TERN_RETURN, 
                                        ":", 
                                        std::move(right), 
-                                       std::move(expression(getNextToken())));
+                                       std::move(rightmost));
 }
 
 /******************* GRAMÁTICA: *******************/
