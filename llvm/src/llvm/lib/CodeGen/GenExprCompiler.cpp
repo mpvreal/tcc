@@ -26,8 +26,7 @@ static const unsigned TRANSITIONS[][ALPHABET_SIZE] = {
 };
 
 GenExprCompiler::GenExprCompiler(const std::string& input) {
-  std::ifstream expr(input);
-  std::getline(expr, this->input);
+  this->input = std::string(input);
 }
 
 std::unique_ptr<GenExprTree> GenExprCompiler::compile(const std::string& input) {

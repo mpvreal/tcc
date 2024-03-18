@@ -45,6 +45,9 @@ static cl::opt<bool, true>
     VerifyRegAlloc("verify-regalloc", cl::location(RegAllocBase::VerifyEnabled),
                    cl::Hidden, cl::desc("Verify during register allocation"));
 
+static cl::opt<std::string> PriorityFunction("priority-function", cl::Hidden, 
+    cl::desc("Priority function to be used in register allocation"), cl::init("original"));
+
 const char RegAllocBase::TimerGroupName[] = "regalloc";
 const char RegAllocBase::TimerGroupDescription[] = "Register Allocation";
 bool RegAllocBase::VerifyEnabled = false;
@@ -69,7 +72,7 @@ void RegAllocBase::init(VirtRegMap &vrm, LiveIntervals &lis,
   // std::ifstream Expr("/home/mpvreal/Code/Faculdade/tcc/deap/HeuristicFunction.txt");
   // std::string LineFromFile;
   // std::getline(Expr, LineFromFile);
-  GenExprCompiler ExprCompiler("/home/mpvreal/Code/Faculdade/tcc/deap/HeuristicFunction.txt");
+  GenExprCompiler ExprCompiler(PriorityFunction);
   LLVM_DEBUG(dbgs() << "Função heurística escolhida: " << ExprCompiler.getInput() << '\n');
   LiveRegPriorityFunction = ExprCompiler.compile();
 
