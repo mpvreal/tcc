@@ -298,16 +298,17 @@ void RAGreedy::enqueue(PQueue &CurQueue, const LiveInterval *LI) {
   3. AVALIAR A EXPRESSÃO
   */
 
-  IntervalSpillArea = calcSpillArea(LI, MRI, &getAnalysis<MachineLoopInfo>());
-  IntervalDeg = calcIntervalDeg(LI, MRI);
+  calcIntervalParams(LI, MRI, Loops, MBFI);
+  // IntervalDeg = calcIntervalDeg(LI, MRI);
   IntervalCost = LI->weight();
   Original = PriorityAdvisor->getPriority(*LI);
+  // MRI.
 
   double Ret = LiveRegPriorityFunction->evaluate();
 
   LLVM_DEBUG(dbgs() << "Registrador: " << printReg(Reg, TRI) 
         << " com prioridade " << Ret << "\n");
-
+      
   // The virtual register number is a tie breaker for same-sized ranges.
   // Give lower vreg numbers higher priority to assign them first.
   CurQueue.push(std::make_pair(Ret, ~Reg));
@@ -2572,8 +2573,8 @@ RAGreedy::RAGreedyStats RAGreedy::reportStats(MachineLoop *L) {
 }
 
 void RAGreedy::reportStats() {
-  // if (!ORE->allowExtraAnalysis(DEBUG_TYPE))
-  //   return;
+  if (!ORE->allowExtraAnalysis(DEBUG_TYPE))
+    return;
   RAGreedyStats Stats;
   for (MachineLoop *L : *Loops)
     Stats.add(reportStats(L));

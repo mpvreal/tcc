@@ -53,6 +53,8 @@ class Spiller;
 class TargetRegisterInfo;
 class VirtRegMap;
 class MachineLoopInfo;
+class MachineBlockFrequencyInfo;
+
 /// RegAllocBase provides the register allocation driver and interface that can
 /// be extended to add interesting heuristics.
 ///
@@ -72,10 +74,22 @@ protected:
   const RegClassFilterFunc ShouldAllocateClass;
   std::unique_ptr<GenExprTree> LiveRegPriorityFunction;
 
-  double IntervalSpillArea;
-  double IntervalCost;
-  unsigned IntervalDeg;
-  unsigned Original;
+  double IntervalSpillArea = 0;
+  double IntervalCost = 0;
+  unsigned IntervalDeg = 0;
+  unsigned Original = 0;
+  unsigned IntervalInstructions = 0;
+  unsigned IntervalSize = 0;
+  unsigned IntervalUses = 0;
+  unsigned IntervalDefs = 0;
+  unsigned IntervalCalls = 0;
+  unsigned IntervalRefs = 0;
+  unsigned IntervalMoves = 0;
+  unsigned IntervalAverageFreq = 0;
+  unsigned IntervalNumValues = 0;
+  unsigned IntervalNumBlocks = 0;
+  bool IntervalIsSpillable = true;
+  bool IntervalIsTerminator = false;
 
   /// Inst which is a def of an original reg and whose defs are already all
   /// dead after remat is saved in DeadRemats. The deletion of such inst is
@@ -125,11 +139,26 @@ protected:
   /// Method called when the allocator is about to remove a LiveInterval.
   virtual void aboutToRemoveInterval(const LiveInterval &LI) {}
 
-  double calcSpillArea(const LiveInterval *LI, 
-                                      const MachineRegisterInfo &MRI,
-                                      const MachineLoopInfo *MLI);
+  void calcIntervalParams(const LiveInterval *LI, 
+                          const MachineRegisterInfo &MRI,
+                          const MachineLoopInfo *MLI,
+                          const MachineBlockFrequencyInfo *MBFI);
 
-  unsigned calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI);
+  void calcIntervalParams(const LiveInterval *LI, 
+                          const MachineRegisterInfo &MRI,
+                          const MachineLoopInfo *MLI,
+                          const MachineBlockFrequencyInfo *MBFI,
+                          const MachineLoop *ML);
+
+  void calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI);
+
+  unsigned calcIntervalSize(const LiveInterval* LI);
+
+  void computeIntervalStats(const LiveInterval *LI, 
+                          const MachineRegisterInfo &MRI,
+                          const MachineLoopInfo *MLI,
+                          const MachineBlockFrequencyInfo *MBFI,
+                          const MachineBasicBlock* MBB);
 
 public:
   /// VerifyEnabled - True when -verify-regalloc is given.

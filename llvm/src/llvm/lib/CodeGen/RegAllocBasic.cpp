@@ -144,8 +144,8 @@ public:
     2. INSTANCIAR VARIÁVEIS COM CAPTURANDO AS ESTATÍSTICAS EM UM LAMBDA
     3. AVALIAR A EXPRESSÃO
     */
-    IntervalSpillArea = calcSpillArea(LI, MRI, MLI);
-    IntervalDeg = calcIntervalDeg(LI, MRI);
+    calcIntervalParams(LI, MRI, MLI, MBFI);
+    // IntervalDeg = calcIntervalDeg(LI, MRI);
     IntervalCost = LI->weight();
     Original = LI->weight();
     
