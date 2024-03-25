@@ -1,2 +1,4 @@
-div(cost,mul(area,pow(degree,2.0)))
 original
+div(cost,pow(degree,2.0))
+div(cost,mul(area,degree))
+div(cost,mul(area,pow(degree,2.0)))
