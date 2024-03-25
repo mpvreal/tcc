@@ -17,6 +17,9 @@ Makefile*
 **/Spec
 **/exe
 
-x86_64
+x86_64*
+!x86_64_peak
+x86_64_peak/*
+!x86_64_peak/531.deepsjeng_r
 arm
 aarch64*

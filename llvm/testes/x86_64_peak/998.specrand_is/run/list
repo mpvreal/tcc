@@ -1,2 +1,0 @@
-run_peak_train_teste1-m64.0000 dir=/home/mpvreal/Code/Faculdade/tcc/spec/benchspec/CPU/998.specrand_is/run/run_peak_train_teste1-m64.0000 label=teste1-m64 lock=0 size=train tune=peak type=run username=root
-__END__
