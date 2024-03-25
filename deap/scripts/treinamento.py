@@ -5,7 +5,7 @@ from random import randint, random, seed, getstate, setstate
 from functools import partial
 from itertools import repeat
 
-with open(r'/home/mpvreal/Code/Faculdade/tcc/deap/parametros.toml', 'rb') as t:
+with open(r'parametros.toml', 'rb') as t:
   parametros = tomllib.load(t)
 
 pset = gp.PrimitiveSetTyped(name='MAIN',
