@@ -148,7 +148,7 @@ def inicializar_populacao(inicializar, populacao, pset, gerar_aleatorios, n):
   Inicializa a população com árvores de expressão a partir do arquivo populacao.
   """
   with open(populacao, 'r') as f:
-    expressoes = f.read().split('\n')
+    expressoes = f.read().strip().split('\n')
     
   pop = [inicializar(i, pset) for i in expressoes]
   while len(pop) < n:
