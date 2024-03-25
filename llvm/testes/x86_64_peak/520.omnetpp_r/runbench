@@ -1,0 +1,11 @@
+# specinvoke r4356
+#  Invoked as: specinvoke -n
+# timer ticks over every 1000 ns
+# Fake output for rate runs will not necessarily clearly represent the order
+# that workloads would be run in a real run.
+# Use another -n on the command line to see chdir commands and env dump
+# Starting run for copy #0
+echo "../run_base_refrate_teste1-m64.0000/omnetpp_r_base.teste1-m64 -c General -r 0" > run.sh ;  bash run.sh 0<&- > omnetpp.General-0.out 2>> omnetpp.General-0.err
+# Starting run for copy #1
+echo "../run_base_refrate_teste1-m64.0000/omnetpp_r_base.teste1-m64 -c General -r 0" > run.sh ;  bash run.sh 0<&- > omnetpp.General-0.out 2>> omnetpp.General-0.err
+specinvoke exit: rc=0

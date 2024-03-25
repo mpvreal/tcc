@@ -298,7 +298,7 @@ void RAGreedy::enqueue(PQueue &CurQueue, const LiveInterval *LI) {
   3. AVALIAR A EXPRESSÃO
   */
 
-  calcIntervalParams(LI, MRI, Loops, MBFI);
+  calcIntervalParams(LI, MRI, Loops, MBFI, MF);
   // IntervalDeg = calcIntervalDeg(LI, MRI);
   IntervalCost = LI->weight();
   Original = PriorityAdvisor->getPriority(*LI);

@@ -1,0 +1,44 @@
+-E COLORTERM truecolor
+-E DISPLAY :1
+-E EDITOR /usr/bin/nano
+-E GOMP_CPU_AFFINITY 0-4
+-E HOME /root
+-E LANG pt_BR.UTF-8
+-E LC_ADDRESS pt_BR.UTF-8
+-E LC_ALL C
+-E LC_IDENTIFICATION pt_BR.UTF-8
+-E LC_LANG C
+-E LC_MEASUREMENT pt_BR.UTF-8
+-E LC_MONETARY pt_BR.UTF-8
+-E LC_NAME pt_BR.UTF-8
+-E LC_NUMERIC pt_BR.UTF-8
+-E LC_PAPER pt_BR.UTF-8
+-E LC_TELEPHONE pt_BR.UTF-8
+-E LC_TIME pt_BR.UTF-8
+-E LD_LIBRARY_PATH /usr/lib:/usr/lib
+-E LIBC_FATAL_STDERR_ 1
+-E LIBRARY_PATH /usr/lib:/usr/lib
+-E LOGNAME root
+-E LS_COLORS 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=01;05;37;41:mi=01;05;37;41:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.pdf=00;32:*.ps=00;32:*.txt=00;32:*.patch=00;32:*.diff=00;32:*.log=00;32:*.tex=00;32:*.doc=00;32:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:'
+-E MAIL /var/mail/root
+-E OMP_NUM_THREADS 4
+-E OMP_STACKSIZE 128M
+-E OMP_THREAD_LIMIT 4
+-E PATH /usr/bin:/home/mpvreal/Code/Faculdade/tcc/spec/bin:/usr/lib/jvm/default/bin:/home/mpvreal/.local/bin:/usr/local/bin:/usr/bin:/var/lib/snapd/snap/bin:/usr/local/sbin:/var/lib/flatpak/exports/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/mpvreal/.local/share/JetBrains/Toolbox/scripts
+-E QT_AUTO_SCREEN_SCALE_FACTOR 1
+-E QT_QPA_PLATFORMTHEME qt5ct
+-E SHELL /bin/bash
+-E SPEC /home/mpvreal/Code/Faculdade/tcc/spec
+-E SPECDB_PWD /home/mpvreal/Code/Faculdade/tcc/spec
+-E SUDO_COMMAND '/home/mpvreal/Code/Faculdade/tcc/spec/bin/runcpu --fake --loose --size=train --tune=peak --config=llvm-linux-x86_64.cfg 500.perlbench_r 502.gcc_r 503.bwaves_r 505.mcf_r 507.cactuBSSN_r 508.namd_r 510.parest_r 511.povray_r 519.lbm_r 520.omnetpp_r 523.xalancbmk_r 525.x264_r 526.blender_r 531.deepsjeng_r 538.imagick_r 541.leela_r 544.nab_r 548.exchange2_r 549.fotonik3d_r 554.roms_r 557.xz_r 600.perlbench_s 602.gcc_s 603.bwaves_s 605.mcf_s 607.cactuBSSN_s 619.lbm_s 620.omnetpp_s 623.xalancbmk_s 625.x264_s 631.deepsjeng_s 638.imagick_s 641.leela_s 644.nab_s 648.exchange2_s 649.fotonik3d_s 654.roms_s 657.xz_s 996.specrand_fs 997.specrand_fr 998.specrand_is 999.specrand_ir'
+-E SUDO_GID 1000
+-E SUDO_UID 1000
+-E SUDO_USER mpvreal
+-E TERM xterm-256color
+-E USER root
+-E XAUTHORITY /run/user/1000/gdm/Xauthority
+-E XDG_CURRENT_DESKTOP GNOME
+-N C
+-C /home/mpvreal/Code/Faculdade/tcc/spec/benchspec/CPU/605.mcf_s/run/run_peak_train_teste1-m64.0000
+-k -o inp.out.cmp /home/mpvreal/Code/Faculdade/tcc/spec/bin/specperl /home/mpvreal/Code/Faculdade/tcc/spec/bin/harness/specdiff -m -l 10 /home/mpvreal/Code/Faculdade/tcc/spec/benchspec/CPU/505.mcf_r/data/train/output/inp.out inp.out
+-k -o mcf.out.cmp /home/mpvreal/Code/Faculdade/tcc/spec/bin/specperl /home/mpvreal/Code/Faculdade/tcc/spec/bin/harness/specdiff -m -l 10 /home/mpvreal/Code/Faculdade/tcc/spec/benchspec/CPU/505.mcf_r/data/train/output/mcf.out mcf.out

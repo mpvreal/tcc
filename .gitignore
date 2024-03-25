@@ -36,7 +36,6 @@ spec
 .idea
 .vscode
 llvm/.old
-llvm/testes
 llvm/build
 llvm/src/*
 !llvm/src/llvm

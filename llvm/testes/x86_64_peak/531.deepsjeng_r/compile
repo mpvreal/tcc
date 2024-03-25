@@ -1,0 +1,11 @@
+#!/bin/bash
+
+LLC=~/Code/Faculdade/tcc/llvm/build/bin/llc
+
+cd ~/Code/Faculdade/tcc/llvm/testes/x86_64_peak/531.deepsjeng_r/build/build_peak_teste1-m64.0000
+
+find . -type f -name "*.ll" -print | xargs -P 0 -i $LLC -O3 -filetype=obj --priority-function="$2" --regalloc=$1 {}
+
+NAME=`date +%s`
+clang++ -m64 -O3 -mavx -no-pie -z muldefs attacks.o bitboard.o bits.o board.o draw.o endgame.o epd.o generate.o initp.o make.o moves.o neval.o pawn.o preproc.o search.o see.o sjeng.o state.o ttable.o utils.o -o ../../run/run_peak_train_teste1-m64.0000/$NAME
+echo $NAME

@@ -1,0 +1,11 @@
+# specinvoke r4356
+#  Invoked as: specinvoke -n
+# timer ticks over every 1000 ns
+# Fake output for rate runs will not necessarily clearly represent the order
+# that workloads would be run in a real run.
+# Use another -n on the command line to see chdir commands and env dump
+# Starting run for copy #0
+echo "../run_base_refrate_teste1-m64.0000/roms_r_base.teste1-m64" > run.sh ;  bash run.sh < ocean_benchmark2.in.x > ocean_benchmark2.log 2>> ocean_benchmark2.err
+# Starting run for copy #1
+echo "../run_base_refrate_teste1-m64.0000/roms_r_base.teste1-m64" > run.sh ;  bash run.sh < ocean_benchmark2.in.x > ocean_benchmark2.log 2>> ocean_benchmark2.err
+specinvoke exit: rc=0

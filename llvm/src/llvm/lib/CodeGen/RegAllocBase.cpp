@@ -93,7 +93,42 @@ void RegAllocBase::init(VirtRegMap &vrm, LiveIntervals &lis,
   LiveRegPriorityFunction->setVariable("size", [&IntervalSize = IntervalSize]() { 
     return IntervalSize; 
   });
-
+  LiveRegPriorityFunction->setVariable("uses", [&IntervalUses = IntervalUses]() { 
+    return IntervalUses; 
+  });
+  LiveRegPriorityFunction->setVariable("defs", [&IntervalDefs = IntervalDefs]() { 
+    return IntervalDefs; 
+  });
+  LiveRegPriorityFunction->setVariable("calls", [&IntervalCalls = IntervalCalls]() { 
+    return IntervalCalls; 
+  });
+  LiveRegPriorityFunction->setVariable("refs", [&IntervalRefs = IntervalRefs]() { 
+    return IntervalRefs; 
+  });
+  LiveRegPriorityFunction->setVariable("moves", [&IntervalMoves = IntervalMoves]() { 
+    return IntervalMoves; 
+  });
+  LiveRegPriorityFunction->setVariable("numValues", [&IntervalNumValues = IntervalNumValues]() { 
+    return IntervalNumValues; 
+  });
+  LiveRegPriorityFunction->setVariable("numBlocks", [&IntervalNumBlocks = IntervalNumBlocks]() { 
+    return IntervalNumBlocks; 
+  });
+  LiveRegPriorityFunction->setVariable("averageFreq", [&IntervalAverageFreq = IntervalAverageFreq]() { 
+    return IntervalAverageFreq; 
+  });
+  LiveRegPriorityFunction->setVariable("isSpillable", [&IntervalIsSpillable = IntervalIsSpillable]() { 
+    return IntervalIsSpillable; 
+  });
+  LiveRegPriorityFunction->setVariable("isTerminator", [&IntervalIsTerminator = IntervalIsTerminator]() { 
+    return IntervalIsTerminator; 
+  });
+  LiveRegPriorityFunction->setVariable("hasAtLeastOneValue", [&IntervalHasAtLeastOneValue = IntervalHasAtLeastOneValue]() { 
+    return IntervalHasAtLeastOneValue; 
+  });
+  LiveRegPriorityFunction->setVariable("instructions", [&IntervalInstructions = IntervalInstructions]() { 
+    return IntervalInstructions; 
+  });
 }
 
 // Visit all the live registers. If they are already assigned to a physical
@@ -222,20 +257,66 @@ void RegAllocBase::enqueue(const LiveInterval *LI) {
   }
 }
 
-// void computeIntervalStats(const LiveInterval *LI, 
-//                           const MachineRegisterInfo &MRI,
-//                           const MachineLoopInfo *MLI,
-//                           const MachineBlockFrequencyInfo *MBFI,
-//                           const MachineBasicBlock* MBB) {
-  
-// }
+void RegAllocBase::computeIntervalStats(const LiveInterval *LI, 
+                                        const MachineRegisterInfo &MRI,
+                                        const MachineLoopInfo *MLI,
+                                        const MachineBlockFrequencyInfo *MBFI,
+                                        MachineBasicBlock* MBB,
+                                        std::map<MachineBasicBlock *, double> &IntervalBlockFrequencies) {
+  for (MachineInstr &MI : *MBB) {
+    SlotIndex MIIndex = LIS->getInstructionIndex(MI);
+    // Se área ja foi calculada para a instrução, não é necessário calcular novamente
+    if (IntervalsLiveAtInstr.find(MIIndex) == IntervalsLiveAtInstr.end()) {
+      unsigned NumIntervalsLiveAtMI = 0;    // Número de intervalos vivos na instrução  
+
+      for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) { // Para registrador virtual
+        LiveInterval &AnotherInterval = LIS->getInterval(Register::index2VirtReg(i)); // Obtém intervalo associado
+        if (!AnotherInterval.empty() && AnotherInterval.liveAt(MIIndex)) // Se o intervalo está vivo na instrução
+          ++NumIntervalsLiveAtMI; // Incrementa o número de intervalos vivos na instrução
+      }
+
+      IntervalsLiveAtInstr[MIIndex] = NumIntervalsLiveAtMI; // Salva o número de intervalos vivos na instrução
+    }
+
+    if (!LI->liveAt(MIIndex))
+      continue;
+
+    if (MI.isInlineAsm())
+      continue;
+
+    IntervalInstructions++;
+
+    if (!IntervalIsTerminator)
+      IntervalIsTerminator = MI.isTerminator();
+    
+    bool Reads, Writes;
+    std::tie(Reads, Writes) = MI.readsWritesVirtualRegister(LI->reg());
+    IntervalUses += Reads;
+    IntervalDefs += Writes;
+    IntervalCalls += MI.isCall();
+    IntervalRefs += !MI.memoperands_empty();
+    IntervalMoves += MI.isMoveReg() && (Reads || Writes);
+    if (IntervalBlockFrequencies.find(MBB) == IntervalBlockFrequencies.end())
+      IntervalBlockFrequencies[MBB] = MBFI->getBlockFreqRelativeToEntryBlock(MBB);
+
+    unsigned ExponentResult = 1; // Resultado da expressão 5^Depth(LI)
+    MachineLoop* MILoop = MLI->getLoopFor(MI.getParent());
+    unsigned Depth = MILoop != nullptr ? MILoop->getLoopDepth() : 0; // Depth(LI)
+    while (Depth > 0) {
+      ExponentResult *= 5;
+      --Depth;
+    }
+
+    IntervalSpillArea += ExponentResult * IntervalsLiveAtInstr[MIIndex];
+  }
+}
 
 void RegAllocBase::calcIntervalParams(const LiveInterval *LI, 
                                       const MachineRegisterInfo &MRI,
                                       const MachineLoopInfo *MLI,
-                                      const MachineBlockFrequencyInfo *MBFI) {
-  std::set<MachineBasicBlock *> IntervalBlocks;
-  bool IntervalHasTerminator = false;
+                                      const MachineBlockFrequencyInfo *MBFI,
+                                      MachineFunction *MF) {
+  std::map<MachineBasicBlock *, double> IntervalBlockFrequencies;
   IntervalSpillArea = 0;
   IntervalInstructions = 0;
   IntervalUses = 0;
@@ -244,86 +325,48 @@ void RegAllocBase::calcIntervalParams(const LiveInterval *LI,
   IntervalRefs = 0;
   IntervalMoves = 0;
   IntervalAverageFreq = 0;
-  IntervalNumValues = 0;
-  IntervalDeg = 0;
+
+  for (MachineBasicBlock &MBB : *MF)
+    computeIntervalStats(LI, MRI, MLI, MBFI, &MBB, IntervalBlockFrequencies);
+
+  calcIntervalDeg(LI, MRI);
+  IntervalCost = LI->weight();
+  IntervalSize = LI->getSize();
   IntervalNumValues = LI->getNumValNums();
   IntervalIsSpillable = LI->isSpillable();
+  IntervalHasAtLeastOneValue = LI->hasAtLeastOneValue();
+  IntervalNumBlocks = IntervalBlockFrequencies.size();
+  IntervalAverageFreq 
+      = std::accumulate(IntervalBlockFrequencies.begin(), IntervalBlockFrequencies.end(), 0.0, 
+        [](double sum , const std::pair<MachineBasicBlock *, double>& p) { return sum + p.second; }) 
+        / (IntervalNumBlocks ? IntervalNumBlocks : 1);
 
-  for (auto I = MRI.reg_instr_nodbg_begin(LI->reg()), E = MRI.reg_instr_nodbg_end(); I != E;) {
-    MachineInstr *MI = &*(I++);
-    SlotIndex MIIndex = LIS->getInstructionIndex(*MI);
-    MachineBasicBlock *MBB = MI->getParent();
-    bool Reads, Writes;
-    std::tie(Reads, Writes) = MI->readsWritesVirtualRegister(LI->reg());
-
-    if (!IntervalHasTerminator)
-      IntervalHasTerminator = MI->isTerminator();
-
-    IntervalBlocks.insert(MBB);
-    IntervalUses += Reads;
-    IntervalDefs += Writes;
-    IntervalCalls += MI->isCall();
-    IntervalRefs += !MI->memoperands_empty();
-    IntervalMoves += MI->isMoveReg() && (Reads || Writes);
-    IntervalAverageFreq += MBFI->getBlockFreqRelativeToEntryBlock(MBB);
-
-    if (MI->isInlineAsm())
-      continue;
-
-    unsigned ExponentResult = 1; // Resultado da expressão 5^Depth(LI)
-    MachineLoop* MILoop = MLI->getLoopFor(MI->getParent());
-    unsigned Depth = MILoop != nullptr ? MILoop->getLoopDepth() : 0; // Depth(LI)
-    while (Depth > 0) {
-      ExponentResult *= 5;
-      --Depth;
-    }
-
-    unsigned NumIntervalsLiveAtMI = 0;
-    for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
-      LiveInterval &AnotherInterval = LIS->getInterval(Register::index2VirtReg(i));
-      NumIntervalsLiveAtMI += (unsigned) 
-          (!AnotherInterval.empty() 
-              ? AnotherInterval.liveAt(MIIndex) 
-              : false);
-      IntervalDeg = (unsigned) (!LI->empty() ? LI->overlaps(AnotherInterval) : false);
-    }
-
-    IntervalSpillArea += ExponentResult * NumIntervalsLiveAtMI--;
-    if (NumIntervalsLiveAtMI > IntervalDeg) IntervalDeg = NumIntervalsLiveAtMI;
-    ++IntervalInstructions;
-  }
-
-  IntervalAverageFreq /= IntervalInstructions;
-  IntervalSize = LI->getSize();
-  IntervalNumBlocks = IntervalBlocks.size();
-  IntervalIsTerminator = IntervalHasTerminator && IntervalNumBlocks == 1;
-  IntervalCost = LI->weight();
-
-  std::cerr << "===== Live Interval " << LI->reg() << " =====\n"
-            << "IntervalSpillArea: " << IntervalSpillArea << '\n'
-            << "IntervalInstructions: " << IntervalInstructions << '\n'
-            << "IntervalUses: " << IntervalUses << '\n'
-            << "IntervalDefs: " << IntervalDefs << '\n'
-            << "IntervalCalls: " << IntervalCalls << '\n'
-            << "IntervalRefs: " << IntervalRefs << '\n'
-            << "IntervalMoves: " << IntervalMoves << '\n'
-            << "IntervalAverageFreq: " << IntervalAverageFreq << '\n'
-            << "IntervalNumValues: " << IntervalNumValues << '\n'
-            << "IntervalNumBlocks: " << IntervalNumBlocks << '\n'
-            << "IntervalIsSpillable: " << IntervalIsSpillable << '\n'
-            << "IntervalIsTerminator: " << IntervalIsTerminator << '\n'
-            << "IntervalCost: " << IntervalCost << '\n'
-            << "IntervalDeg: " << IntervalDeg << '\n'
-            << "IntervalSize: " << IntervalSize << '\n';
+  // std::cerr << "===== Live Interval " << LI->reg() << " =====\n"
+  //           << "IntervalSpillArea: " << IntervalSpillArea << '\n'
+  //           << "IntervalInstructions: " << IntervalInstructions << '\n'
+  //           << "IntervalUses: " << IntervalUses << '\n'
+  //           << "IntervalDefs: " << IntervalDefs << '\n'
+  //           << "IntervalCalls: " << IntervalCalls << '\n'
+  //           << "IntervalRefs: " << IntervalRefs << '\n'
+  //           << "IntervalMoves: " << IntervalMoves << '\n'
+  //           << "IntervalAverageFreq: " << IntervalAverageFreq << '\n'
+  //           << "IntervalNumValues: " << IntervalNumValues << '\n'
+  //           << "IntervalNumBlocks: " << IntervalNumBlocks << '\n'
+  //           << "IntervalIsSpillable: " << IntervalIsSpillable << '\n'
+  //           << "IntervalIsTerminator: " << IntervalIsTerminator << '\n'
+  //           << "IntervalCost: " << IntervalCost << '\n'
+  //           << "IntervalDeg: " << IntervalDeg << '\n'
+  //           << "IntervalSize: " << IntervalSize << '\n';
 }
 
 void RegAllocBase::calcIntervalDeg(const LiveInterval* LI, const MachineRegisterInfo &MRI) {
   IntervalDeg = 0;
-
   for (unsigned i = 0, e = MRI.getNumVirtRegs(); i != e; i++) {
-    IntervalDeg += (unsigned) (!LI->empty() 
-        ? LI->overlaps(LIS->getInterval(Register::index2VirtReg(i)))
-        : false);
+    if (LI->reg() == Register::index2VirtReg(i))
+      continue; 
+      
+    LiveInterval &AnotherInterval = LIS->getInterval(Register::index2VirtReg(i));
+    IntervalDeg += (unsigned) (!LI->empty() ? LI->overlaps(AnotherInterval) : false);
   }
 }
 

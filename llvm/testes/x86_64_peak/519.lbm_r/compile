@@ -1,0 +1,11 @@
+#!/bin/bash
+
+LLC=~/Code/Faculdade/tcc/llvm/build/bin/llc
+
+cd /home/mpvreal/Code/Faculdade/tcc/llvm/testes/x86_64_peak/519.lbm_r/build/build_peak_teste1-m64.0000
+
+find . -type f -name "*.ll" -print | xargs -P 0 -i $LLC -O3 -filetype=obj --priority-function="$2" --regalloc=$1 {}
+
+NAME=`date +%s`
+clang -no-pie -m64 -O3 -mavx -z muldefs -lm -o ../../run/run_peak_train_teste1-m64.0000/$NAME lbm.o main.o
+echo $NAME

@@ -7,9 +7,15 @@ fi
 cd ../spec
 source shrc
 
-CFG=llvm-linux-aarch64.cfg
+CFG=llvm-linux-x86_64.cfg
 
-for b in "$@"; do
-	runcpu --config=$CFG --action=clean $b
-	runcpu --config=$CFG --action=build --tune=base $b
+runcpu --config=$CFG --action=clean $@
+
+runcpu --config $CFG --action build --tune peak $@
+
+runcpu --config $CFG --fake --lose --size train --tune peak $@
+
+cd benchspec/CPU/
+for dir in */; do
+  find $dir -type f -name "*.o" -execdir mv {} {}.ll
 done

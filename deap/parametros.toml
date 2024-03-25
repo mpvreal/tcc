@@ -1,0 +1,19 @@
+populacao = 4
+num_geracoes = 1
+num_rodadas = 1
+tam_torneio = 7
+prob_mutacao = 0.1
+prob_cruzamento = 0.9
+freq_checkpoint = 1
+
+arq_populacao = '/home/mpvreal/Code/Faculdade/tcc/deap/populacao.txt'
+arq_checkpoint = '/home/mpvreal/Code/Faculdade/tcc/deap/checkpoint.pkl'
+arq_log = '/home/mpvreal/Code/Faculdade/tcc/deap/log.txt'
+arq_hof = '/home/mpvreal/Code/Faculdade/tcc/deap/hof.txt'
+arq_pop = '/home/mpvreal/Code/Faculdade/tcc/deap/pop_final.txt'
+novo_treinamento = true
+caminho = '/home/mpvreal/Code/Faculdade/tcc/llvm/testes/x86_64_peak'
+
+alocador = "greedy"
+verbose = true
+seed = 666

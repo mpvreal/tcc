@@ -1,0 +1,1 @@
+originaldiv(cost, mul(area, pow(degree, 2.0)))sqrt(original)div(cost, mul(area, pow(degree, 2.0)))

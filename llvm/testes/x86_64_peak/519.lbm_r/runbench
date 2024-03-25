@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd /home/mpvreal/Code/Faculdade/tcc/llvm/testes/x86_64_peak/519.lbm_r/run/run_peak_train_teste1-m64.0000
+TIMEFORMAT=%R
+TIME=$( { time ./$1 3000 reference.dat 0 0 100_100_130_cf_b.of 0<&- > /dev/null; } 2>&1)
+echo $TIME
