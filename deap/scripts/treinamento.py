@@ -158,7 +158,7 @@ def inicializar_populacao(inicializar, populacao, pset, gerar_aleatorios, n):
 
 
 tb = base.Toolbox()
-pool = mp.Pool()
+pool = mp.Pool(processes=2)
 tb.register('map', pool.map)
 tb.register('expr', gp.genHalfAndHalf, pset=pset, min_=1, max_=2)
 tb.register('aleatorio', tools.initIterate, creator.Individual, tb.expr)
