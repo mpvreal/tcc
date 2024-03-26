@@ -1,6 +1,6 @@
 populacao = 100
 num_geracoes = 30
-num_rodadas = 1
+num_rodadas = 10
 tam_torneio = 7
 prob_mutacao = 0.1
 prob_cruzamento = 0.9

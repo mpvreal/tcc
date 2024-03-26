@@ -205,9 +205,10 @@ def evoluir(population, toolbox, mu, lambda_, cxpb, mutpb, ngen,
   for ind in invalid_ind:
     toolbox.compile(ind)
 
+  print('===== Geração: 0 =====')
   fitnesses = []
-  for first, second, third, fourth in zip(invalid_ind[::4], invalid_ind[1::4], invalid_ind[2::4], invalid_ind[3::4]):
-    fitnesses.extend(toolbox.map(toolbox.evaluate, [first, second, third, fourth]))
+  for first, second in zip(invalid_ind[::2], invalid_ind[1::2]):
+    fitnesses.extend(toolbox.map(toolbox.evaluate, [first, second]))
 
   for ind, fit in zip(invalid_ind, fitnesses):
     ind.fitness.values = fit
@@ -223,6 +224,7 @@ def evoluir(population, toolbox, mu, lambda_, cxpb, mutpb, ngen,
 
   # Begin the generational process
   for gen in range(1, ngen + 1):
+    print(f'===== Geração: {gen} =====')
     # Vary the population
     offspring = algorithms.varOr(population, toolbox, lambda_, cxpb, mutpb)
 
@@ -232,8 +234,8 @@ def evoluir(population, toolbox, mu, lambda_, cxpb, mutpb, ngen,
       toolbox.compile(ind)
 
     fitnesses = []
-    for first, second, third, fourth in zip(invalid_ind[::4], invalid_ind[1::4], invalid_ind[2::4], invalid_ind[3::4]):
-      fitnesses.extend(toolbox.map(toolbox.evaluate, [first, second, third, fourth]))
+    for first, second in zip(invalid_ind[::2], invalid_ind[1::2]):
+      fitnesses.extend(toolbox.map(toolbox.evaluate, [first, second]))
       
     for ind, fit in zip(invalid_ind, fitnesses):
       ind.fitness.values = fit
