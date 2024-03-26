@@ -5,7 +5,7 @@ from random import randint, random, seed, getstate, setstate
 from functools import partial
 from itertools import repeat
 
-with open(r'parametros.toml', 'rb') as t:
+with open(r'/home/mpvreal/Code/Faculdade/tcc/deap/parametros.toml', 'rb') as t:
   parametros = tomllib.load(t)
 
 pset = gp.PrimitiveSetTyped(name='MAIN',
@@ -148,7 +148,7 @@ def inicializar_populacao(inicializar, populacao, pset, gerar_aleatorios, n):
   Inicializa a população com árvores de expressão a partir do arquivo populacao.
   """
   with open(populacao, 'r') as f:
-    expressoes = f.read().strip().split('\n')
+    expressoes = f.read().split('\n')
     
   pop = [inicializar(i, pset) for i in expressoes]
   while len(pop) < n:
@@ -205,7 +205,10 @@ def evoluir(population, toolbox, mu, lambda_, cxpb, mutpb, ngen,
   for ind in invalid_ind:
     toolbox.compile(ind)
 
-  fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
+  fitnesses = []
+  for first, second in zip(invalid_ind[::2], invalid_ind[1::2]):
+    fitnesses.extend(toolbox.map(toolbox.evaluate, [first, second]))
+
   for ind, fit in zip(invalid_ind, fitnesses):
     ind.fitness.values = fit
 
@@ -227,7 +230,11 @@ def evoluir(population, toolbox, mu, lambda_, cxpb, mutpb, ngen,
     invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
     for ind in invalid_ind:
       toolbox.compile(ind)
-    fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
+
+    fitnesses = []
+    for first, second in zip(invalid_ind[::2], invalid_ind[1::2]):
+      fitnesses.extend(toolbox.map(toolbox.evaluate, [first, second]))
+      
     for ind, fit in zip(invalid_ind, fitnesses):
       ind.fitness.values = fit
 
@@ -295,6 +302,6 @@ with open(parametros['arq_hof'], 'w') as f:
 
 with open(parametros['arq_pop'], 'w') as f:
   for i in pop:
-    f.write(str(i))
+    f.write(str(i) + '\n')
 
 
