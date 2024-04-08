@@ -17,7 +17,7 @@ cmake -G Ninja \
 	    -DLLVM_USE_SPLIT_DWARF=ON \
 	    -DCMAKE_CXX_LINK_FLAGS="-Wl,-rpath,/usr/lib" \
 	    -DLLVM_DIR=/usr/lib/cmake/llvm \
-	    -DLLVM_TARGETS_TO_BUILD="X86;AArch64;ARM" \
+	    -DLLVM_TARGETS_TO_BUILD="X86;AArch64" \
 	    $llvm_root/llvm
 	  
 ninja llc

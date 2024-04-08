@@ -1,0 +1,6 @@
+505.mcf_r
+508.namd_r
+525.x264_r
+541.leela_r
+544.nab_r
+557.xz_r

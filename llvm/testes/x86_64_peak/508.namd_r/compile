@@ -1,0 +1,9 @@
+#!/bin/bash
+
+LLC=~/Code/Faculdade/tcc/llvm/build/bin/llc
+
+cd ~/Code/Faculdade/tcc/llvm/testes/x86_64_peak/508.namd_r/build/build_peak_teste1-m64.0000
+
+find . -type f -name "*.ll" -print | xargs -P 0 -i $LLC -O3 -filetype=obj --priority-function="$2" --regalloc=$1 {}
+
+clang++ -no-pie -m64 -O3 -mavx -std=c++03 Compute.o ComputeList.o ComputeNonbondedFEP.o ComputeNonbondedLES.o ComputeNonbondedPProf.o ComputeNonbondedStd.o ComputeNonbondedUtil.o LJTable.o Molecule.o Patch.o PatchList.o ResultSet.o SimParameters.o erf.o spec_namd.o -o ../../run/run_peak_refrate_teste1-m64.0000/$3

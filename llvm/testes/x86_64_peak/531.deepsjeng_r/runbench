@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd `pwd`/run/run_peak_train_teste1-m64.0000
+cd /home/mpvreal/Code/Faculdade/tcc/llvm/testes/x86_64_peak/531.deepsjeng_r/run/run_peak_train_teste1-m64.0000
 TIMEFORMAT=%R
 TIME=$( { time ./$1 train.txt 0<&- > /dev/null; } 2>&1)
 echo $TIME

@@ -20,6 +20,12 @@ Makefile*
 x86_64*
 !x86_64_peak
 x86_64_peak/*
+!x86_64_peak/505.mcf_r
+!x86_64_peak/508.namd_r
+!x86_64_peak/525.x264_r
+!x86_64_peak/541.leela_r
+!x86_64_peak/544.nab_r
+!x86_64_peak/557.xz_r
 !x86_64_peak/531.deepsjeng_r
 arm
 aarch64*
