@@ -1,0 +1,19 @@
+"Função heurística: original",Reloads,FoldedReloads,ZeroCostFoldedReloads,Spills,FoldedSpills,Copies,ReloadsCost,FoldedReloadsCost,SpillsCost,FoldedSpillsCost,CopiesCost
+function@main,0,0,0,0,0,14,0,0,0,0,54.1667
+function@MAIN_parseCommandLine,0,0,0,0,0,3,0,0,0,0,3
+function@MAIN_printInfo,0,0,0,0,0,0,0,0,0,0,0
+function@MAIN_initialize,0,0,0,0,0,1,0,0,0,0,1
+function@MAIN_finalize,0,0,0,0,0,1,0,0,0,0,1
+function@LBM_allocateGrid,0,0,0,0,0,1,0,0,0,0,1
+function@LBM_freeGrid,0,0,0,0,0,1,0,0,0,0,1
+function@LBM_initializeGrid,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_swapGrids,0,0,0,0,0,0,0,0,0,0,0
+function@LBM_loadObstacleFile,0,0,0,0,0,9,0,0,0,0,33860.5
+function@LBM_initializeSpecialCellsForLDC,0,0,0,0,0,7,0,0,0,0,3740.12
+function@LBM_initializeSpecialCellsForChannel,0,0,0,0,0,2,0,0,0,0,10954.5
+function@LBM_performStreamCollideBGK,0,0,0,0,0,3,0,0,0,0,63.625
+function@LBM_performStreamCollideTRT,27,30,0,52,0,3,420.625,460.25,825.5,0,63.625
+function@LBM_handleInOutFlow,8,5,0,12,0,4,255,159.375,382.5,0,127.5
+function@LBM_showGridStatistics,10,3,0,9,0,1,97,47.625,185.125,0,15.875
+function@LBM_storeVelocityField,4,3,0,7,0,12,33856,98304,132160,0,114694
+function@LBM_compareVelocityField,20,6,0,23,0,15,558144,196608,656448,0,172038

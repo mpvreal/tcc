@@ -1,0 +1,2 @@
+Comando: /home/mpvreal/Code/Faculdade/tcc/llvm/build/bin/llc --march=x86-64 --regalloc=greedy --priority-function=original -o -
+Heurística: original

@@ -2573,8 +2573,8 @@ RAGreedy::RAGreedyStats RAGreedy::reportStats(MachineLoop *L) {
 }
 
 void RAGreedy::reportStats() {
-  if (!ORE->allowExtraAnalysis(DEBUG_TYPE))
-    return;
+  // if (!ORE->allowExtraAnalysis(DEBUG_TYPE))
+  //   return;
   RAGreedyStats Stats;
   for (MachineLoop *L : *Loops)
     Stats.add(reportStats(L));
@@ -2584,10 +2584,39 @@ void RAGreedy::reportStats() {
       Stats.add(computeStats(MBB));
 
   std::cerr << "function@" << MF->getName().str() << ","
-      << Stats.Reloads << "," << Stats.FoldedReloads << "," << Stats.ZeroCostFoldedReloads 
-      << "," << Stats.Spills << "," << Stats.FoldedSpills << "," << Stats.Copies << ","
-      << Stats.ReloadsCost << "," << Stats.FoldedReloadsCost << "," << Stats.SpillsCost
-      << "," << Stats.FoldedSpillsCost << "," << Stats.CopiesCost << '\n';
+      << OriginalStats.Reloads << ","
+      << OriginalStats.FoldedReloads << ","
+      << OriginalStats.ZeroCostFoldedReloads << ","
+      << OriginalStats.Spills << ","
+      << OriginalStats.FoldedSpills << ","
+      << OriginalStats.Copies << ","
+      << OriginalStats.ReloadsCost << ","
+      << OriginalStats.FoldedReloadsCost << ","
+      << OriginalStats.SpillsCost << ","
+      << OriginalStats.FoldedSpillsCost << ","
+      << OriginalStats.CopiesCost << "\n";
+      // << Stats.Reloads << ","
+      // << Stats.FoldedReloads << ","
+      // << Stats.ZeroCostFoldedReloads << ","
+      // << Stats.Spills << ","
+      // << Stats.FoldedSpills << ","  
+      // << Stats.Copies << ","
+      // << Stats.ReloadsCost << ","
+      // << Stats.FoldedReloadsCost << ","
+      // << Stats.SpillsCost << ","
+      // << Stats.FoldedSpillsCost << ","
+      // << Stats.CopiesCost << '\n';
+      // << Stats.Reloads - OriginalStats.Reloads << ","
+      // << Stats.FoldedReloads - OriginalStats.FoldedReloads << ","
+      // << Stats.ZeroCostFoldedReloads - OriginalStats.ZeroCostFoldedReloads << ","
+      // << Stats.Spills - OriginalStats.Spills << ","
+      // << Stats.FoldedSpills - OriginalStats.FoldedSpills << ","
+      // << Stats.Copies - OriginalStats.Copies << ","
+      // << Stats.ReloadsCost - OriginalStats.ReloadsCost << ","
+      // << Stats.FoldedReloadsCost - OriginalStats.FoldedReloadsCost << ","
+      // << Stats.SpillsCost - OriginalStats.SpillsCost << ","
+      // << Stats.FoldedSpillsCost - OriginalStats.FoldedSpillsCost << ","
+      // << Stats.CopiesCost - OriginalStats.CopiesCost << '\n';
 
   if (!Stats.isEmpty()) {
     using namespace ore;
@@ -2603,6 +2632,20 @@ void RAGreedy::reportStats() {
       return R;
     });
   }
+}
+
+void RAGreedy::reportOriginalStats() {
+  // if (!ORE->allowExtraAnalysis(DEBUG_TYPE))
+  //   return;
+  RAGreedyStats Stats;
+  for (MachineLoop *L : *Loops)
+    Stats.add(reportStats(L));
+  // Process non-loop blocks.
+  for (MachineBasicBlock &MBB : *MF)
+    if (!Loops->getLoopFor(&MBB))
+      Stats.add(computeStats(MBB));
+
+  OriginalStats.add(Stats);
 }
 
 bool RAGreedy::hasVirtRegAlloc() {
@@ -2680,6 +2723,7 @@ bool RAGreedy::runOnMachineFunction(MachineFunction &mf) {
   GlobalCand.resize(32);  // This will grow as needed.
   SetOfBrokenHints.clear();
 
+  reportOriginalStats();
   allocatePhysRegs();
   tryHintsRecoloring();
 

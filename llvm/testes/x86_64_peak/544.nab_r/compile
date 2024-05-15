@@ -1,9 +1,0 @@
-#!/bin/bash
-
-LLC=~/Code/Faculdade/tcc/llvm/build/bin/llc
-
-cd ~/Code/Faculdade/tcc/llvm/testes/x86_64_peak/544.nab_r/build/build_peak_teste1-m64.0000
-
-find . -type f -name "*.ll" -print | xargs -P 0 -i $LLC -O3 -filetype=obj --priority-function="$2" --regalloc=$1 {}
-
-clang -no-pie -m64 -Ofast -mavx nabmd.o sff.o nblist.o prm.o memutil.o molio.o molutil.o errormsg.o binpos.o rand2.o select_atoms.o reslib.o database.o traceback.o chirvol.o specrand/specrand.o regex-alpha/regcomp.o regex-alpha/regerror.o regex-alpha/regexec.o regex-alpha/regfree.o -lm -o ../../run/run_peak_refrate_teste1-m64.0000/$3

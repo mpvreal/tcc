@@ -1,9 +1,0 @@
-#!/bin/bash
-
-LLC=~/Code/Faculdade/tcc/llvm/build/bin/llc
-
-cd ~/Code/Faculdade/tcc/llvm/testes/x86_64_peak/41.leela_r/build/build_peak_teste1-m64.0000
-
-find . -type f -name "*.ll" -print | xargs -P 0 -i $LLC -O3 -filetype=obj --priority-function="$2" --regalloc=$1 {}
-
-clang++ -no-pie -m64 -O3 -mavx FullBoard.o KoState.o Playout.o TimeControl.o UCTSearch.o GameState.o Leela.o SGFParser.o Timing.o Utils.o FastBoard.o Matcher.o SGFTree.o TTable.o Zobrist.o FastState.o GTP.o MCOTable.o Random.o SMP.o UCTNode.o -o ../../run/run_peak_refrate_teste1-m64.0000/$3

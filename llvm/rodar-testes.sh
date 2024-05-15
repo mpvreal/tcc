@@ -5,12 +5,11 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-export TESTES=`pwd`/testes/$MARCH
-export RESULTADOS=`pwd`/resultados/$MARCH
-export LLC=`pwd`/build/bin/llc
-export HEURISTICA=$(head -1 `pwd`/../deap/HeuristicFunction.txt)
-export TOTAL=$(($#*2))
-export finalizados=0
+export LLVM_HOME=/home/mpvreal/Code/Faculdade/tcc/llvm
+export TESTES=$LLVM_HOME/testes/$MARCH
+export RESULTADOS=$LLVM_HOME/resultados/$MARCH
+export LLC=$LLVM_HOME/build/bin/llc
+export HEURISTICA=$(head -1 $LLVM_HOME/../deap/HeuristicFunction.txt)
 
 function run_test {
 	benchmark=$(echo $1 | cut -d':' -f1)
@@ -18,8 +17,8 @@ function run_test {
 
   mkdir -p $RESULTADOS/$benchmark/$HEURISTICA
 
-  LLC_ARGS=-"-march=$MARCH --regalloc=$regalloc -o -"
-	BUILD=$TESTES/$benchmark/build/$(ls $TESTES/$benchmark/build | grep build_base | head -1)
+  LLC_ARGS="--march=$MARCH --regalloc=$regalloc --priority-function=$HEURISTICA -o -"
+	BUILD=$TESTES/$benchmark/build/$(ls $TESTES/$benchmark/build | grep build_peak | head -1)
 	RESULTADO=$RESULTADOS/$benchmark/$HEURISTICA/$benchmark"_"$regalloc"_"`date +%F_%T`
 
   LP='\033[1;35m'

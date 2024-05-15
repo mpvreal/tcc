@@ -432,7 +432,7 @@ private:
     }
 
     void report(MachineOptimizationRemarkMissed &R);
-  };
+  } OriginalStats;
 
   /// Compute statistic for a basic block.
   RAGreedyStats computeStats(MachineBasicBlock &MBB);
@@ -442,6 +442,7 @@ private:
 
   /// Report the statistic for each loop.
   void reportStats();
+  void reportOriginalStats();
 };
 } // namespace llvm
 #endif // #ifndef LLVM_CODEGEN_REGALLOCGREEDY_H_

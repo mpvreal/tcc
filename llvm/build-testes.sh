@@ -13,7 +13,7 @@ runcpu --config=$CFG --action=clean $@
 
 runcpu --config $CFG --action build --tune peak $@
 
-runcpu --config $CFG --fake --lose --size train --tune peak $@
+runcpu --config $CFG --fake --loose --size train --tune peak $@
 
 cd benchspec/CPU/
 for dir in */; do

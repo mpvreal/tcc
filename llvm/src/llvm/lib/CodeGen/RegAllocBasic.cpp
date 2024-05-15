@@ -99,7 +99,7 @@ class RABasic : public MachineFunctionPass,
     }
 
     // void report(MachineOptimizationRemarkMissed &R);
-  };
+  } OriginalStats;
 
   RABasicStats reportStats(MachineLoop *L, MachineLoopInfo* Loops);
 
@@ -118,6 +118,7 @@ class RABasic : public MachineFunctionPass,
   BitVector UsableRegs;
 
   void reportStats();
+  void reportOriginalStats();
 
   bool LRE_CanEraseVirtReg(Register) override;
   void LRE_WillShrinkVirtReg(Register) override;
@@ -496,10 +497,53 @@ void RABasic::reportStats() {
       Stats.add(computeStats(MBB));
 
   std::cerr << "function@" << MF->getName().str() << ","
-      << Stats.Reloads << "," << Stats.FoldedReloads << "," << Stats.ZeroCostFoldedReloads 
-      << "," << Stats.Spills << "," << Stats.FoldedSpills << "," << Stats.Copies << ","
-      << Stats.ReloadsCost << "," << Stats.FoldedReloadsCost << "," << Stats.SpillsCost
-      << "," << Stats.FoldedSpillsCost << "," << Stats.CopiesCost << '\n';
+      << OriginalStats.Reloads << ","
+      << OriginalStats.FoldedReloads << ","
+      << OriginalStats.ZeroCostFoldedReloads << ","
+      << OriginalStats.Spills << ","
+      << OriginalStats.FoldedSpills << ","
+      << OriginalStats.Copies << ","
+      << OriginalStats.ReloadsCost << ","
+      << OriginalStats.FoldedReloadsCost << ","
+      << OriginalStats.SpillsCost << ","
+      << OriginalStats.FoldedSpillsCost << ","
+      << OriginalStats.CopiesCost << "\n";
+      // << Stats.Reloads << ","
+      // << Stats.FoldedReloads << ","
+      // << Stats.ZeroCostFoldedReloads << ","
+      // << Stats.Spills << ","
+      // << Stats.FoldedSpills << ","
+      // << Stats.Copies << ","
+      // << Stats.ReloadsCost << ","
+      // << Stats.FoldedReloadsCost << ","
+      // << Stats.SpillsCost << ","
+      // << Stats.FoldedSpillsCost << ","
+      // << Stats.CopiesCost << '\n';
+      // << Stats.Reloads - OriginalStats.Reloads << ","
+      // << Stats.FoldedReloads - OriginalStats.FoldedReloads << ","
+      // << Stats.ZeroCostFoldedReloads - OriginalStats.ZeroCostFoldedReloads << ","
+      // << Stats.Spills - OriginalStats.Spills << ","
+      // << Stats.FoldedSpills - OriginalStats.FoldedSpills << ","
+      // << Stats.Copies - OriginalStats.Copies << ","
+      // << Stats.ReloadsCost - OriginalStats.ReloadsCost << ","
+      // << Stats.FoldedReloadsCost - OriginalStats.FoldedReloadsCost << ","
+      // << Stats.SpillsCost - OriginalStats.SpillsCost << ","
+      // << Stats.FoldedSpillsCost - OriginalStats.FoldedSpillsCost << ","
+      // << Stats.CopiesCost - OriginalStats.CopiesCost << '\n';
+}
+
+void RABasic::reportOriginalStats() {
+  RABasicStats Stats;
+
+  for (MachineLoop *L : *MLI)
+    Stats.add(reportStats(L, MLI));
+
+  // Process non-loop blocks.
+  for (MachineBasicBlock &MBB : *MF)
+    if (!MLI->getLoopFor(&MBB))
+      Stats.add(computeStats(MBB));
+
+  OriginalStats.add(Stats);
 }
 
 bool RABasic::runOnMachineFunction(MachineFunction &mf) {
@@ -520,6 +564,7 @@ bool RABasic::runOnMachineFunction(MachineFunction &mf) {
 
   SpillerInstance.reset(createInlineSpiller(*this, *MF, *VRM, VRAI));
 
+  reportOriginalStats();
   allocatePhysRegs();
   postOptimization();
   reportStats();

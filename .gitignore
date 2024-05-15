@@ -33,10 +33,15 @@
 
 test
 spec
+deap/notebooks/checkpoint.pkl
+deap/notebooks/lbm.err
+deap/notebooks/lbm.out
 .idea
 .vscode
 llvm/.old
 llvm/build
+llvm/testes
+llvm/resultados/graficos
 llvm/src/*
 !llvm/src/llvm
 llvm/src/llvm/*
